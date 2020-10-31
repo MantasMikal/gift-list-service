@@ -1,0 +1,42 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.header__branding {
+  margin-right: auto;
+}
+
+.header__logo {
+  max-width: 32px;
+  margin-right: 8px;
+}
+
+.header__site-title {
+  display: inline-block;
+  margin: 0;
+}
+
+.header__nav a:not(:last-child) {
+  margin-right: 8px;
+}
+
+@media screen and (min-width: 600px) {
+  .header__logo {
+    max-width: 42px;
+    margin-right: 12px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .header__logo {
+    max-width: 60px;
+  }
+
+  .header__nav a:not(:last-child) {
+    margin-right: 16px;
+  }
+}

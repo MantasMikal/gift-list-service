@@ -1,0 +1,105 @@
+@import url('https://use.typekit.net/rnl5jdi.css');
+
+:root {
+  --color-black: #1E1E1E;
+  --color-white: #FEFEFE;
+}
+
+html {
+	font-family: futura-pt, sans-serif;
+	color: var(--color-black);
+}
+
+body {
+	font-size: 1em;
+	-webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive images by default */
+
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  vertical-align: bottom;
+  border: 0;
+}
+
+/* Buttons */
+
+.button {
+  background-color: var(--color-black);
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: var(--color-white);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 600px) {
+  .button {
+    padding: 8px 16px;
+  }
+}
+
+/* Responsive container */
+
+.container--center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container--gutter {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.container--wide {
+  max-width: 1520px;
+}
+
+@media screen and (min-width: 600px) {
+  .container--gutter {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* Responsive Typography */
+
+.title--large {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.title--small {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+@media screen and (min-width: 600px) {
+  .title--large {
+    font-size: 32px;
+	}
+
+	.title {
+		font-size: 28px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+	.title--large {
+		font-size: 42px;
+	}
+
+	.title {
+		font-size: 32px;
+  }
+}
+

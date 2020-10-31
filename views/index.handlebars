@@ -1,31 +1,51 @@
-
 <!doctype html>
-
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Home Page</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<header>
-			<h1>Home</h1>
-			{{#if authorised}}
-				<a href="/logout">Log out</a>
-			{{else}}
-				<a href="/login">Log in</a>
-			{{/if}}
-		</header>
-		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
-		{{/if}}
-	<main>
-		<p>This is the home page. Users can see it without logging in.</p>
+
+<head>
+	<meta charset="utf-8">
+	<title>Home | Gift List </title>
+	<meta name="description" content="Gift List Service">
+	<meta name="author" content="Mantas Mikalauskas">
+	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/events.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+	<header class='container--center container--gutter container--wide header'>
+		<div class='header__branding'>
+			<img src='site_logo.svg' alt='Gift List' class='header__logo' />
+			<h1 class="title--large header__site-title">Gift List</h1>
+		</div>
 		{{#if authorised}}
-			<p><a href="/secure">secure page</a></p>
-		{{/if}}
+		<nav class="header__nav">
+			<a class="button" href="/new">New Event</a>
+			<a class="button" href="/logout">Log out</a>
+			{{else}}
+			<a class="button" href="/login">Log in</a>
+			{{/if}}
+		</nav>
+	</header>
+	{{#if msg}}
+	<p class="msg">{{msg}}</p>
+	{{/if}}
+	<main>
+		<div class="container--center container--gutter container--wide">
+			<h2 class="title">All Events</h2>
+			<div class="events__wrapper">
+				{{#each events}}
+				<a class="events__event">
+					<img src={{this.thumbnail}} class="events__thumbnail" alt={{this.title}} />
+					<div class="events__event-details">
+						<h3 class="title--small event__title">{{this.title}}</h3>
+						<time class="events__creation-date">{{this.datecreated}}</time>
+					</div>
+				</a>
+				{{/each}}
+			</div>
+		</div>
 	</main>
-	</body>
+</body>
+
 </html>
