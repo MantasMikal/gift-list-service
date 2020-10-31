@@ -23,19 +23,19 @@ class Events {
 	 * retrieves all events
 	 * @returns {Array} returns array containing all events in the database
 	 */
-  async all() {
-    const sql = 'SELECT * FROM events'
-    const allEvents = await this.db.all(sql)
-    for(const i in allEvents){
-      if(!allEvents[i].thumbnail) allEvents[i].thumbnail = 'thumbnail_placeholder.jpg'
-      const dateTime = new Date(allEvents[i].datecreated)
-      const date = `${dateTime.getDate()}/${dateTime.getMonth()+1}/${dateTime.getFullYear()}`
-      allEvents[i].datecreated = date
-    }
+	async all() {
+		const sql = 'SELECT * FROM events'
+		const allEvents = await this.db.all(sql)
+		for(const i in allEvents) {
+			if(!allEvents[i].thumbnail) allEvents[i].thumbnail = 'thumbnail_placeholder.jpg'
+			const dateTime = new Date(allEvents[i].datecreated)
+			const date = `${dateTime.getDate()}/${dateTime.getMonth()+1}/${dateTime.getFullYear()}`
+			allEvents[i].datecreated = date
+		}
 
-    return allEvents
-  }
-  
+		return allEvents
+	}
+
 	async close() {
 		await this.db.close()
 	}

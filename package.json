@@ -19,6 +19,7 @@
 		"start": "node index.js",
 		"jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
 		"linter": "node_modules/.bin/eslint .",
+		"fix": "node_modules/.bin/eslint . --fix",
 		"test": "ava"
 	},
 	"author": "",
