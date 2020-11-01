@@ -18,11 +18,12 @@
 			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
 			<h1 class="title--large header__site-title">Gift List</h1>
 		</a>
-		{{#if authorised}}
 		<nav class="header__nav">
+			{{#if authorised}}
 			<a class="button" href="/event/new">New Event</a>
 			<a class="button" href="/logout">Log out</a>
 			{{else}}
+			<a class="button" href="/register">Register</a>
 			<a class="button" href="/login">Log in</a>
 			{{/if}}
 		</nav>

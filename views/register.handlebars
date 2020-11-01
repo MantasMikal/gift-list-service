@@ -1,38 +1,55 @@
-
 <!doctype html>
-
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Create an Account</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<header>
-		<h1>Create an Account</h1>
-		<a href="/login">Log in</a>
-		</header>
-		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
-		{{/if}}
-		<main>
-		<form action="/register" enctype="multipart/form-data" method="post">
-			<p>
-				<label for="user">Username</label><br />
-				<input type="text" name="user" placeholder="your preferred username (no spaces)" value="{{body.user}}">
-			</p>
-			<p>
-				<label for="pass">Password</label><br />
-				<input type="password" name="pass" placeholder="your chosen password" value="{{body.pass}}">
-			</p>
-			<p>
-				<label for="email">Email</label><br />
-				<input type="email" name="email" placeholder="a valid email address" value="{{body.email}}">
-			</p>
-			<p><input type="submit" value="Create"></p>
-		</form>
-		</main>
-	</body>
+
+<head>
+	<meta charset="utf-8">
+	<title>Register| Gift List </title>
+	<meta name="description" content="Gift List Service">
+	<meta name="author" content="Mantas Mikalauskas">
+	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/login.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+	<header class='container--center container--gutter container--wide header'>
+		<a class='header__branding' href='/'>
+			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
+			<h1 class="title--large header__site-title">Gift List</h1>
+		</a>
+		<nav class="header__nav">
+			{{#if authorised}}
+			<a class="button" href="/event/new">New Event</a>
+			<a class="button" href="/logout">Log out</a>
+			{{else}}
+			<a class="button" href="/login">Log in</a>
+			<a class="button" href="/register">Register</a>
+			{{/if}}
+		</nav>
+	</header>
+	<main>
+		<div class="container--center container--gutter container--wide">
+			<h2 class="title">Register a new account</h2>
+			<p>Already have one? <a href="/login">Log in</a></p>
+			<form action="/register" enctype="multipart/form-data" method="post">
+				<div class="login__field">
+					<label for="user">Username</label><br />
+					<input type="text" name="user" placeholder="Your username" value="{{body.user}}" required>
+				</div>
+				<div class="login__field">
+					<label for="pass">Password</label><br />
+					<input type="password" name="pass" placeholder="Your password" value="{{body.pass}}" required>
+				</div>
+				<div>
+					<label for="email">Email</label><br />
+					<input type="email" name="email" placeholder="Your email address" value="{{body.email}}" required>
+				</div>
+			<br />
+				<button class="button" type="submit">Register</button>
+			</form>
+		</div>
+	</main>
+</body>
+
 </html>
