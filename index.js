@@ -3,7 +3,6 @@ import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
-
 import { apiRouter } from './routes/routes.js'
 
 const app = new Koa()
@@ -20,6 +19,8 @@ app.use( async(ctx, next) => {
 	console.log(`${ctx.method} ${ctx.path}`)
 	ctx.hbs = {
 		authorised: ctx.session.authorised,
+		user: ctx.session.user,
+		userId: ctx.session.userId,
 		host: `https://${ctx.host}`
 	}
 	for(const key in ctx.query) ctx.hbs[key] = ctx.query[key]

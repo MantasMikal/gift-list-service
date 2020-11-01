@@ -15,31 +15,28 @@
 <body>
 	<header class='container--center container--gutter container--wide header'>
 		<div class='header__branding'>
-			<img src='site_logo.svg' alt='Gift List' class='header__logo' />
+			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
 			<h1 class="title--large header__site-title">Gift List</h1>
 		</div>
 		{{#if authorised}}
 		<nav class="header__nav">
-			<a class="button" href="/new">New Event</a>
+			<a class="button" href="/event/new">New Event</a>
 			<a class="button" href="/logout">Log out</a>
 			{{else}}
 			<a class="button" href="/login">Log in</a>
 			{{/if}}
 		</nav>
 	</header>
-	{{#if msg}}
-	<p class="msg">{{msg}}</p>
-	{{/if}}
 	<main>
 		<div class="container--center container--gutter container--wide">
 			<h2 class="title">All Events</h2>
 			<div class="events__wrapper">
 				{{#each events}}
 				<a class="events__event">
-					<img src={{this.thumbnail}} class="events__thumbnail" alt={{this.title}} />
+					<img src="/images/{{this.thumbnail}}" class="events__thumbnail" alt={{this.title}} />
 					<div class="events__event-details">
 						<h3 class="title--small event__title">{{this.title}}</h3>
-						<time class="events__creation-date">{{this.datecreated}}</time>
+						<time class="events__creation-date">{{this.date}}</time>
 					</div>
 				</a>
 				{{/each}}
