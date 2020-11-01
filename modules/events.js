@@ -1,44 +1,90 @@
+/** @module Events */
 
-import sqlite from 'sqlite-async'
+import sqlite from "sqlite-async";
+import mime from "mime-types";
+import fs from "fs-extra";
 
 class Events {
-
-	constructor(dbName = ':memory:') {
-		return (async() => {
-			this.db = await sqlite.open(dbName)
-			const sql = 'CREATE TABLE IF NOT EXISTS events(\
+  constructor(dbName = ":memory:") {
+    return (async () => {
+      this.db = await sqlite.open(dbName);
+      const sql =
+        "CREATE TABLE IF NOT EXISTS events(\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
-          userid INTEGER NOT NULL,\
-          title TEXT NOT NULL,\
-          datecreated INTEGER NOT NULL, \
+          userId INTEGER NOT NULL,\
+					title TEXT NOT NULL,\
+					description TEXT, \
+          date INTEGER NOT NULL, \
           thumbnail TEXT,\
-          FOREIGN KEY(userid) REFERENCES users(id)\
-        );'
-			await this.db.run(sql)
-			return this
-		})()
-	}
+          FOREIGN KEY(userId) REFERENCES users(id)\
+        );";
+      await this.db.run(sql);
+      return this;
+    })();
+  }
 
-	/**
-	 * retrieves all events
-	 * @returns {Array} returns array containing all events in the database
-	 */
-	async all() {
-		const sql = 'SELECT * FROM events'
-		const allEvents = await this.db.all(sql)
-		for(const i in allEvents) {
-			if(!allEvents[i].thumbnail) allEvents[i].thumbnail = 'thumbnail_placeholder.jpg'
-			const dateTime = new Date(allEvents[i].datecreated)
-			const date = `${dateTime.getDate()}/${dateTime.getMonth()+1}/${dateTime.getFullYear()}`
-			allEvents[i].datecreated = date
-		}
+  /**
+   * retrieves all events
+   * @returns {Array} returns array containing all events in the database
+   */
+  async all() {
+    const sql = "SELECT * FROM events";
+    return await this.db.all(sql);
+  }
 
-		return allEvents
-	}
+  /**
+   * Adds new event
+   * @param {Number} userId user ID in the database
+   * @param {String} titke event title
+   * @param {String} description event description
+   * @param {Date} date date of the event
+   * @param {String} fileType file type of the image thumbnail
+   * @param {String} filePath path to the file
+   * @returns {Number} returns the inserted event ID
+   */
+  async add(data) {
+    console.log("Adding new event", data);
+    const {
+      userId,
+      title,
+      description,
+      date,
+      fileType,
+      filePath,
+      fileName,
+      fileSize,
+		} = data;
 
-	async close() {
-		await this.db.close()
-	}
+    Array.from([title, date, userId]).forEach((val) => {
+      if (!val) throw Error("missing field");
+    });
+  
+		if(fileSize > 5000000) throw Error("image is too big")
+
+    let formattedFileName;
+    const formattedDate = new Date(date).toLocaleDateString();
+
+    if (fileName) {
+      formattedFileName = `${Date.now()}.${mime.extension(fileType)}`;
+      await fs.copy(filePath, `public/images/${formattedFileName}`);
+    } else {
+      formattedFileName = 'public/images/thumbnail_placeholder.jpg'
+    }
+
+    try {
+      const sql = `INSERT INTO events(userId, title, description, date, thumbnail)\
+			VALUES(${userId}, "${title}", "${description}", "${formattedDate}", "${formattedFileName}")`;
+      const { lastID } = await this.db.run(sql);
+      return lastID;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async close() {
+    await this.db.close();
+  }
 }
 
-export { Events }
+export { Events };

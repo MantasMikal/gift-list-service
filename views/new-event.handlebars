@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>New Event | Gift List </title>
+	<meta name="description" content="Gift List Service">
+	<meta name="author" content="Mantas Mikalauskas">
+	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/new-event.css" type="text/css" rel="stylesheet" />
+	<script type='text/javascript' src="{{host}}/browser/new-event.js"></script>
+</head>
+
+<body>
+	<header class='container--center container--gutter container--wide header'>
+		<div class='header__branding'>
+			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
+			<h1 class="title--large header__site-title">Gift List</h1>
+		</div>
+		<nav class="header__nav">
+			<a class="button" href="/event/new">New Event</a>
+			<a class="button" href="/logout">Log out</a>
+		</nav>
+	</header>
+	<main>
+		<div class="container--center container--gutter container--wide">
+			<div class="new-event__wrapper">
+				<form class="new-event__form" method='post' action="/event/new" enctype="multipart/form-data">
+					<div class="new-event__form-inner">
+						<div class="new-event__event-details">
+							<h3 class="title--small new-event__form-title">Event Details</h3>
+							<div class="new-event__field">
+								<label class="new-event__field-label" for='title'>Event title</label>
+								<input type='text' name='title' placeholder="Your event title" value="" autofocus required />
+							</div>
+
+							<div class="new-event__field">
+								<label class="new-event__field-label" for='thumbnail'>Thumbnail</label>
+								<input type='file' name='thumbnail' accept="image/*" />
+							</div>
+
+							<div class="new-event__field">
+								<label class="new-event__field-label" for='date'>Event date</label>
+								<input type='date' name='date' value="" required />
+							</div>
+
+							<div class="new-event__field">
+								<label class="new-event__field-label" for='description'>Event description</label>
+								<textarea rows="4" cols="50" type='text' name='description' value=""></textarea>
+							</div>
+
+						</div>
+						<div class="new-event__gift-list">
+
+							<h3 class="title--small">Gift List</h3>
+							<div class="new-event__gift-list-fields" id='gift-list-fields'>
+								<div class="new-event__gift-list-field">
+									<div class="new-event__field new-event__field--gift-list">
+										<label class="new-event__field-label" for='name'>Name</label>
+										<input type='text' name='name' placeholder="Name of the gift" value=""
+											required />
+									</div>
+									<div class="new-event__field new-event__field--gift-list">
+										<label class="new-event__field-label" for='price'>Price £</label>
+										<input min='0' step=".01" type='number' name='price' placeholder="0" value="" required />
+									</div>
+									<div class="new-event__field new-event__field--gift-list">
+										<label class="new-event__field-label" for='url'>Link</label>
+										<input type='url' name='url' value="" required />
+									</div>
+								</div>
+							</div>
+							<button class="button new-event__add-field-button" onclick='addNewGiftField(event)'>Add gift</button>
+						</div>
+					</div>
+					<button class="button" type='submit'>Submit</button>
+				</form>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>
