@@ -4,6 +4,8 @@
   --color-black: #1E1E1E;
   --color-white: #FEFEFE;
   --color-grey-light: #FBFBFB;
+  --color-green: #92C483;
+  --color-yellow: #EFB043;
 }
 
 html {
@@ -43,6 +45,10 @@ img {
 @media screen and (min-width: 600px) {
   .button {
     padding: 8px 16px;
+  }
+
+  .button--small {
+    padding: 4px 8px;
   }
 }
 

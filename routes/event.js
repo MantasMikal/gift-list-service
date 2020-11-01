@@ -34,16 +34,39 @@ eventRouter.post('/new', async ctx => {
 			ctx.request.body.fileType = ctx.request.files.thumbnail.type
 			ctx.request.body.fileSize = ctx.request.files.thumbnail.size
 		}
-		
+
 		const eventId = await events.add(ctx.request.body)
-		giftList.map(async(gift) => await gifts.add(eventId, gift))
+		giftList.forEach(async(gift) => await gifts.add({eventId, ...gift}))
+
 		return ctx.redirect('/?msg=New event has been added')
-	
+
 	} catch (err) {
 		console.log(err)
+		ctx.hbs.msg = err.message
+		ctx.hbs.body = ctx.request.body
 		await ctx.render('error', ctx.hbs)
 	} finally {
 		events.close()
+	}
+})
+
+eventRouter.get('/:id', async ctx => {
+	const { id } = ctx.params
+
+	const events = await new Events(dbName)
+	const gifts = await new Gifts(dbName)
+
+	try {
+		const event = await events.getById(id)
+		console.log('event', event, id)
+		const giftList = await gifts.getEventGifts(id)
+
+		ctx.hbs.event = event[0]
+		ctx.hbs.gifts = giftList
+		await ctx.render('event', ctx.hbs)
+	} catch (err) {
+		console.log(err)
+		await ctx.render('error', ctx.hbs)
 	}
 })
 
