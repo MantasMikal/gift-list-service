@@ -9,11 +9,11 @@ class Gifts {
 			const sql =
         'CREATE TABLE IF NOT EXISTS gifts(\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
-          eventid INTEGER NOT NULL,\
+          eventId INTEGER NOT NULL,\
 					name TEXT NOT NULL,\
 					price INTEGER NOT NULL, \
           url TEXT NOT NULL,\
-          FOREIGN KEY(eventid) REFERENCES events(id)\
+          FOREIGN KEY(eventId) REFERENCES events(id)\
         );'
 			await this.db.run(sql)
 			return this
@@ -21,17 +21,17 @@ class Gifts {
 	}
 
 	/**
-   * Adds new event
+   * Adds a new gift
    * @returns {Boolean} true if operation was successful
    */
-	async add(eventId, {name, url, price}) {
+	async add({eventId, name, url, price}) {
 		console.log('Adding new gift', {name, url, price})
 		Array.from([name, url, price, eventId]).forEach((val) => {
-      if (!val) throw Error("missing field");
-		});    
+			if (!val) throw Error('missing field')
+		})
 
 		try {
-			const sql = `INSERT INTO gifts(eventid, name, price, url)\
+			const sql = `INSERT INTO gifts(eventId, name, price, url)\
 			VALUES(${eventId}, "${name}", ${price}, "${url}")`
 
 			await this.db.run(sql)
@@ -41,6 +41,22 @@ class Gifts {
 			console.log(err)
 			throw err
 		}
+	}
+
+	/**
+   * retrieves all gifts of an event
+   * @param {Number} id id of the event
+   * @returns {Object} returns all gifts associated with event id
+   */
+
+	async getEventGifts(id) {
+		console.log('getEventGifts -> id', id)
+		if(!id || isNaN(id)) {
+			throw Error('invalid or missing id')
+		}
+
+		const sql = `SELECT * FROM gifts WHERE eventId = ${id}`
+		return await this.db.all(sql)
 	}
 
 	async close() {

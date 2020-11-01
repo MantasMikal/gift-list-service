@@ -6,18 +6,18 @@ import { Events } from '../modules/events.js'
 
 const mockEvents = [
 	{
-		eventId: 1,
 		userId: 1,
 		title: 'Title',
 		description: 'Description',
-		date: '11/12/2020'
+		date: '11/12/2020',
+		thumbnail: 'public/thumbnail_placeholder.jpg',
 	},
 	{
-		eventId: 2,
-		userId: 2,
+		userId: 1,
 		title: 'Title2',
 		description: 'Description2',
-		date: '11/12/2020'
+		date: '11/12/2020',
+		thumbnail: 'public/thumbnail_placeholder.jpg',
 	},
 ]
 
@@ -92,10 +92,15 @@ test('EVENTS : return all events', async(test) => {
 
 	await events.add(mockEvents[0])
 	await events.add(mockEvents[1])
-
 	const allEvents = await events.all()
-	test.is(allEvents.length, 2, 'does not return all added events')
 
+	const expectedGifts = [
+		{id: 1, ...mockEvents[0]},
+		{id: 2, ...mockEvents[1]}
+	]
+
+
+	test.deepEqual(allEvents, expectedGifts, 'does not return all added events')
 	events.close()
 })
 
@@ -103,11 +108,27 @@ test('EVENTS : should use placeholder image if no image is suplied', async(test)
 	test.plan(1)
 	const events = await new Events()
 
-	await events.add(mockEvents[0])
+	await events.add({...mockEvents[0], thumbnail: undefined})
 
 	const allEvents = await events.all()
-	test.is(allEvents[0].thumbnail, 'public/images/thumbnail_placeholder.jpg', 'does not use placeholder')
+	test.is(allEvents[0].thumbnail, 'public/thumbnail_placeholder.jpg', 'does not use placeholder')
 
 	events.close()
 })
 
+test('EVENTS : should return event by id', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+
+	await events.add(mockEvents[0])
+	await events.add(mockEvents[1])
+
+	const allEvents = await events.getById(1)
+
+	const expectedGifts = [
+		{id: 1, ...mockEvents[0]},
+	]
+
+	test.deepEqual(allEvents, expectedGifts, 'does not return all events by id')
+	events.close()
+})

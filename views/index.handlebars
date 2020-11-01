@@ -9,15 +9,15 @@
 	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
-	<link href="{{host}}/styles/events.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/event.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
 	<header class='container--center container--gutter container--wide header'>
-		<div class='header__branding'>
+		<a class='header__branding' href='/'>
 			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
 			<h1 class="title--large header__site-title">Gift List</h1>
-		</div>
+		</a>
 		{{#if authorised}}
 		<nav class="header__nav">
 			<a class="button" href="/event/new">New Event</a>
@@ -32,11 +32,11 @@
 			<h2 class="title">All Events</h2>
 			<div class="events__wrapper">
 				{{#each events}}
-				<a class="events__event">
-					<img src="/images/{{this.thumbnail}}" class="events__thumbnail" alt={{this.title}} />
+				<a class="events__event" href="/event/{{this.id}}">
+					<img src="/images/{{this.thumbnail}}" class="events__event-thumbnail" alt={{this.name}} />
 					<div class="events__event-details">
-						<h3 class="title--small event__title">{{this.title}}</h3>
-						<time class="events__creation-date">{{this.date}}</time>
+						<h3 class="title--small events__event-title">{{this.title}}</h3>
+						<time class="events__event-creation-date">{{this.date}}</time>
 					</div>
 				</a>
 				{{/each}}

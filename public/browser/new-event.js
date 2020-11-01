@@ -1,10 +1,9 @@
-/** 
+/**
  * Adds new gift field
- * @param {Object} e event 
+ * @param {Object} e event
 */
 const addNewGiftField = (e) => {
 	e.preventDefault()
-
 	const template = `
 	<div class="new-event__gift-list-fields" id='gift-list-fields'>
 		<div class="new-event__gift-list-field">
@@ -23,7 +22,6 @@ const addNewGiftField = (e) => {
 			</div>
 		</div>
 	</div>`
-
 	const fieldWrapper = document.getElementById('gift-list-fields')
 	fieldWrapper && fieldWrapper.insertAdjacentHTML('beforeend', template)
 }
