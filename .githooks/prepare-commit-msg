@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # With thanks to Sergio Vaccaro <sergio.vaccaro@istat.it>
 
@@ -12,26 +12,42 @@ PROTECTED_BRANCH="master"
 # Remote
 REMOTE=""
 
-# Check for merges
-if [[ $2 != 'merge' ]]; then
-    # Not a merge
-    ECHO "  not a merge"
-    exit 0
-fi
+# # Check for merges
+# if [[ $2 != 'merge' ]]; then
+#     # Not a merge
+#     echo "  not a merge"
+#     exit 0
+# fi
 
 # Current branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 # Check if in PROTECTED_BRANCH
-#if [[ "$CURRENT_BRANCH" != "$PROTECTED_BRANCH" ]]; then
-#    # Not in PROTECTED_BRANCH: can proceed
-#    ECHO "  not in the ${PROTECTED_BRANCH} branch"
-#    exit 0
-#fi
+if [[ "$CURRENT_BRANCH" = "$PROTECTED_BRANCH" ]]; then
+   # In PROTECTED_BRANCH: can't proceed
+   echo "You're trying to push to ${PROTECTED_BRANCH} branch"
+   echo "Aborting. Open a pull request instead."
+   exit 1
+fi
 
-echo "  you are trying to merge into the ${PROTECTED_BRANCH} branch"
-echo "  merging branches to master must be done by creating a pull request"
-echo "  this merge has been cancelled however you will need to"
-echo "  reset the operation before continuing by running git reset --merge"
-echo
-exit 1
+
+# Enforce SWW commit template
+ORIG_MSG_FILE="$1"
+TEMP=`mktemp /tmp/git-XXXXX`
+exec < /dev/tty
+echo "Please enter type of commit (fix/feature/chore):"
+read TYPE
+echo "Please enter short summary of the commit:"
+read SUMMARY
+echo "Please enter why the commit is needed:"
+read WHY
+echo "Please enter what the commit does:"
+read WHAT
+
+MESSAGE="$TYPE: $SUMMARY
+$WHY
+$WHAT
+"
+
+(echo "$MESSAGE"; cat "$ORIG_MSG_FILE") > "$TEMP"
+cat "$TEMP" > "$ORIG_MSG_FILE"
