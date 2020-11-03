@@ -29,6 +29,13 @@ img {
   border: 0;
 }
 
+
+/* Form Styles */
+
+input {
+  margin-bottom: 8px;
+}
+
 /* Buttons */
 
 .button {
@@ -67,6 +74,7 @@ img {
 .container--wide {
   max-width: 1520px;
 }
+
 
 @media screen and (min-width: 600px) {
   .container--gutter {

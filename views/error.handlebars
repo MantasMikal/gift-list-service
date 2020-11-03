@@ -1,20 +1,38 @@
-
 <!doctype html>
-
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>ERROR</title>
-		<meta name="description" content="The HTML5 Template">
-		<meta name="author" content="Joe Bloggs">
-		<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<header>
-			<h1>An Error Has Occurred</h1>
-		</header>
-		<main>
-			<h2>{{message}}</h2>
-		</main>
-	</body>
+
+<head>
+	<meta charset="utf-8">
+	<title>>ERROR | Gift List </title>
+	<meta name="description" content="Gift List Service">
+	<meta name="author" content="Mantas Mikalauskas">
+	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+	<header class='container--center container--gutter container--wide header'>
+		<a class='header__branding' href='/'>
+			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
+			<h1 class="title--large header__site-title">Gift List</h1>
+		</a>
+		<nav class="header__nav">
+			{{#if authorised}}
+			<a class="button" href="/event/new">New Event</a>
+			<a class="button" href="/logout">Log out</a>
+			{{else}}
+			<a class="button" href="/register">Register</a>
+			<a class="button" href="/login">Log in</a>
+			{{/if}}
+		</nav>
+	</header>
+	<main>
+		<div class="container--center container--gutter container--wide">
+			<h2 class="title">An Error Has Occurred</h2>
+			<p>{{message}}</p>
+		</div>
+	</main>
+</body>
+
 </html>

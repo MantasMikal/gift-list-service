@@ -1,36 +1,52 @@
-
 <!doctype html>
-
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Log In</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
-	</head>
-	<body>
-		<header>
-		<h1>Log In</h1>
-		<a href="/register">Register</a>
-		</header>
-		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
-		{{/if}}
-		<main>
-		<form action="/login" method="post">
-			<p>
-				<label for="user">Username</label><br />
-				<input type="text" name="user" placeholder="your username" value="{{body.user}}" autofocus>
-			</p>
-			<p>
-				<label for="pass">Password</label><br />
-				<input type="password" name="pass" placeholder="your password" value="{{body.pass}}">
-			</p>
-			<input type="hidden" name="referrer" value="{{referrer}}">
-			<p><input type="submit" value="Log in"></p>
-		</form>
-		<p><a href="/">Home page</a></p>
-		</main>
-	</body>
+
+<head>
+	<meta charset="utf-8">
+	<title>Log In | Gift List </title>
+	<meta name="description" content="Gift List Service">
+	<meta name="author" content="Mantas Mikalauskas">
+	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/styles/login.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+	<header class='container--center container--gutter container--wide header'>
+		<a class='header__branding' href='/'>
+			<img src='/site_logo.svg' alt='Gift List' class='header__logo' />
+			<h1 class="title--large header__site-title">Gift List</h1>
+		</a>
+		<nav class="header__nav">
+			{{#if authorised}}
+			<a class="button" href="/event/new">New Event</a>
+			<a class="button" href="/logout">Log out</a>
+			{{else}}
+			<a class="button" href="/login">Log in</a>
+			<a class="button" href="/register">Register</a>
+			{{/if}}
+		</nav>
+	</header>
+	<main>
+		<div class="container--center container--gutter container--wide">
+			<h2 class="title">Log in</h2>
+			<form action="/login" method="post">
+				<div class="login__field">
+					<label for="user">Username</label><br />
+					<input type="text" name="user" placeholder="your username" value="{{body.user}}" autofocus>
+				</div>
+				<div class="login__field">
+					<label for="pass">Password</label><br />
+					<input type="password" name="pass" placeholder="your password" value="{{body.pass}}">
+				</di>
+				<div>
+				<input type="hidden" name="referrer" value="{{referrer}}">
+				<button class="button" type="submit">Log in</button>
+				</div>
+			</form>
+		</div>
+	</main>
+</body>
+
 </html>
