@@ -41,6 +41,7 @@
   height: 0;
   padding-top: 56.25%;
   position: relative;
+  border-radius: 5px 5px 0 0;
 }
 
 .event__thumbnail {
@@ -77,11 +78,10 @@
 }
 
 .event__gift-wrapper {
-  display: flex;
-  align-items: center;
   background-color: var(--color-white);
   padding: 8px;
   border-radius: 5px;
+  margin-bottom: 8px;
 }
 
 .event__gift-price {
@@ -94,17 +94,21 @@
   font-size: 1.2em;
   font-weight: 500;
   margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.event__gift-actions {
+  display: flex;
+  align-items: center;
 }
 
 .event__view-gift-button {
   margin-right: 8px;
-  margin-left: auto;
 }
 
 .event__pledge-button {
   margin-right: 8px;
 }
-
 
 /* Checkbox  */
 
@@ -180,12 +184,6 @@
     margin-top: 16px;
   }
 
-  .event__inner {
-    padding: 32px;
-    display: flex;
-    justify-content: space-between;
-  }
-
   .event__thumbnail-wrapper {
     padding-top: 40%;
   }
@@ -193,6 +191,11 @@
   .event__details {
     margin: 0 32px 32px 0;
     flex: 1 1 50%;
+  }
+
+  .event__gift-wrapper {
+    display: flex;
+    align-items: center;
   }
 
   .event__gift-list {
@@ -203,4 +206,20 @@
     margin-bottom: 16px;
   }
 
+  .event__gift-name {
+    margin-bottom: 0;
+  }
+  
+  .event__gift-actions {
+    margin-left: auto;
+  }
+
+}
+
+@media screen and (min-width: 900px) {
+  .event__inner {
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
