@@ -58,8 +58,8 @@ class Events {
 			if (!val) throw Error('missing field')
 		})
 		if(fileSize > 5000000) throw Error('image is too big')
-    const formattedDate = new Date(date).toLocaleDateString()
-		let formattedFileName		
+		const formattedDate = new Date(date).toLocaleDateString()
+		let formattedFileName
 		if (fileName) {
 			formattedFileName = `${Date.now()}.${mime.extension(fileType)}`
 			await fs.copy(filePath, `public/images/${formattedFileName}`)
@@ -84,9 +84,9 @@ class Events {
    */
 
 	async getById(id) {
-    console.log('Getting event with id', id)
-    if(!id || isNaN(id)) throw Error('invalid or missing') 
-    const sql = `SELECT * FROM events WHERE id = ${id}`
+		console.log('Getting event with id', id)
+		if(!id || isNaN(id)) throw Error('invalid or missing')
+		const sql = `SELECT * FROM events WHERE id = ${id}`
 		return await this.db.all(sql)
 	}
 

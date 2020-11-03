@@ -26,3 +26,4 @@ if [ "$1" == "$2"  ] && [ ${NUM_CHECKOUTS} -eq 1 ]; then
     echo "  new branch '$BRANCH_NAME' created"
 fi
 echo
+
