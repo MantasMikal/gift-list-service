@@ -14,4 +14,4 @@ deploy:
   provider: heroku
   api_key: bab2414b-cf9a-4358-81b4-0e81a45c3dd4
   on:
-    condition: all_branches
+    branch: master
