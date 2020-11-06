@@ -43,10 +43,13 @@ echo "Please enter why the commit is needed:"
 read WHY
 echo "Please enter what the commit does:"
 read WHAT
+echo "Please enter the issue number:"
+read ISSUE
 
 MESSAGE="$TYPE: $SUMMARY
 $WHY
 $WHAT
+[Issue #$ISSUE]
 "
 
 (echo "$MESSAGE"; cat "$ORIG_MSG_FILE") > "$TEMP"
