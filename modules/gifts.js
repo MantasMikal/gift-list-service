@@ -27,13 +27,12 @@ class Gifts {
    * @returns {Boolean} true if operation was successful
    */
 	async add({eventId, name, url, price}) {
-		console.log('Adding new gift', {name, url, price})
 		Array.from([name, eventId]).forEach((val) => {
 			if (!val) throw Error('missing field')
 		})
 		try {
 			const sql = 'INSERT INTO gifts (eventId, name, price, url)\
-			VALUES($1, $2, $3, $4 );'
+			VALUES($1, $2, $3, $4);'
 			const values = [eventId, name, price, url]
 			await this.db.run(sql, values)
 			return true
@@ -53,8 +52,8 @@ class Gifts {
 		if(!id || isNaN(id)) {
 			throw Error('invalid or missing id')
 		}
-		const sql = `SELECT * FROM gifts WHERE eventId = ${id}`
-		return await this.db.all(sql)
+		const sql = 'SELECT * FROM gifts WHERE eventId = $1'
+		return await this.db.all(sql, id)
 	}
 
 	/**
@@ -73,8 +72,9 @@ class Gifts {
 		})
 
 		try {
-			const sql = `UPDATE gifts SET user = "${user}" WHERE (id = ${giftId} AND eventId = ${eventId});`
-			await this.db.all(sql)
+			const sql = 'UPDATE gifts SET user = $1 WHERE (id = $2 AND eventId = $3);'
+			const values = [user, giftId, eventId]
+			await this.db.run(sql, values)
 			return true
 		} catch(err) {
 			console.log(err)

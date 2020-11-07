@@ -49,9 +49,10 @@ class Events {
 		const formattedDate = new Date(data.date).toLocaleDateString()
 		const fileName = await handleImageUpload(data.thumbnail)
 		try {
-			const sql = `INSERT INTO events(userId, title, description, date, thumbnail)\
-			VALUES(${data.userId}, "${data.title}", "${data.description}", "${formattedDate}", "${fileName}")`
-			const { lastID } = await this.db.run(sql)
+			const sql = 'INSERT INTO events(userId, title, description, date, thumbnail)\
+			VALUES($1, $2, $3, $4, $5)'
+			const values = [data.userId, data.title, data.description, formattedDate, fileName]
+			const { lastID } = await this.db.run(sql, values)
 			return lastID
 		} catch (err) {
 			console.log(err)
@@ -67,8 +68,8 @@ class Events {
 	async getById(id) {
 		console.log('Getting event with id', id)
 		if (!id || isNaN(id)) throw Error('invalid or missing')
-		const sql = `SELECT * FROM events WHERE id = ${id}`
-		return await this.db.all(sql)
+		const sql = 'SELECT * FROM events WHERE id = $1'
+		return await this.db.all(sql, id)
 	}
 
 	async close() {
