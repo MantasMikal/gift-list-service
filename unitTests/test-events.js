@@ -10,18 +10,18 @@ const mockEvents = [
 		title: 'Title',
 		description: 'Description',
 		date: '11/12/2020',
-		thumbnail: 'public/thumbnail_placeholder.jpg',
+		thumbnail: 'thumbnail_placeholder.jpg',
 	},
 	{
 		userId: 1,
 		title: 'Title2',
 		description: 'Description2',
 		date: '11/12/2020',
-		thumbnail: 'public/thumbnail_placeholder.jpg',
+		thumbnail: 'thumbnail_placeholder.jpg',
 	},
 ]
 
-test('EVENTS : add new event', async(test) => {
+test('EVENTS:add - add new event', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 	const addEvent = await events.add(
@@ -31,7 +31,7 @@ test('EVENTS : add new event', async(test) => {
 	events.close()
 })
 
-test('EVENTS : error if date missing' , async(test) => {
+test('EVENTS:add - error if date missing' , async(test) => {
 	test.plan(1)
 	const events = await new Events()
 
@@ -45,7 +45,7 @@ test('EVENTS : error if date missing' , async(test) => {
 	}
 })
 
-test('EVENTS : error if title missing' , async(test) => {
+test('EVENTS:add - error if title missing' , async(test) => {
 	test.plan(1)
 	const events = await new Events()
 
@@ -59,7 +59,7 @@ test('EVENTS : error if title missing' , async(test) => {
 	}
 })
 
-test('EVENTS : error if userId missing' , async(test) => {
+test('EVENTS:add - error if userId missing' , async(test) => {
 	test.plan(1)
 	const events = await new Events()
 
@@ -73,20 +73,15 @@ test('EVENTS : error if userId missing' , async(test) => {
 	}
 })
 
-test('EVENTS : error if file is bigger than 5MB' , async(test) => {
+test('EVENTS:add : should return id of added event', async(test) => {
 	test.plan(1)
 	const events = await new Events()
-	try {
-		await events.add({...mockEvents[0], fileSize: 50000000})
-		test.fail('error not thrown')
-	} catch(err) {
-		test.is(err.message, 'image is too big', 'incorrect error message')
-	} finally {
-		events.close()
-	}
+	const eventId = await events.add(mockEvents[0])
+	test.is(eventId, 1, 'does not return added event id')
+	events.close()
 })
 
-test('EVENTS : return all events', async(test) => {
+test('EVENTS:all - return all events', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 
@@ -99,24 +94,23 @@ test('EVENTS : return all events', async(test) => {
 		{id: 2, ...mockEvents[1]}
 	]
 
-
 	test.deepEqual(allEvents, expectedGifts, 'does not return all added events')
 	events.close()
 })
 
-test('EVENTS : should use placeholder image if no image is suplied', async(test) => {
+test('EVENTS:all - should use placeholder image if no image is suplied', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 
 	await events.add({...mockEvents[0], thumbnail: undefined})
 
 	const allEvents = await events.all()
-	test.is(allEvents[0].thumbnail, 'public/thumbnail_placeholder.jpg', 'does not use placeholder')
+	test.is(allEvents[0].thumbnail, 'thumbnail_placeholder.jpg', 'does not use placeholder')
 
 	events.close()
 })
 
-test('EVENTS : should return event by id', async(test) => {
+test('EVENTS:getById - should return event by id', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 

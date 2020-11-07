@@ -1,8 +1,7 @@
 /** @module Events */
 
 import sqlite from 'sqlite-async'
-import mime from 'mime-types'
-import fs from 'fs-extra'
+import handleImageUpload from '../lib/image-upload.js'
 
 class Events {
 	constructor(dbName = ':memory:') {
@@ -34,41 +33,24 @@ class Events {
 
 	/**
    * Adds new event
-   * @param {Number} userId user ID in the database
-   * @param {String} titke event title
-   * @param {String} description event description
-   * @param {Date} date date of the event
-   * @param {String} fileType file type of the image thumbnail
-   * @param {String} filePath path to the file
+   * @param {Number} data.userId user ID in the database
+   * @param {String} data.tilke event title
+   * @param {String} data.description event description
+   * @param {Date} data.date date of the event
+   * @param {String} data.fileType file type of the image thumbnail
+   * @param {String} data.filePath path to the file
+   * @param {String} data.fileName name of the file
    * @returns {Number} returns the inserted event ID
    */
 	async add(data) {
-		const {
-			userId,
-			title,
-			description,
-			date,
-			fileType,
-			filePath,
-			fileName,
-			fileSize,
-		} = data
-
-		Array.from([title, date, userId]).forEach((val) => {
+		Array.from([data.title, data.date, data.userId]).forEach((val) => {
 			if (!val) throw Error('missing field')
 		})
-		if(fileSize > 5000000) throw Error('image is too big')
-		const formattedDate = new Date(date).toLocaleDateString()
-		let formattedFileName
-		if (fileName) {
-			formattedFileName = `${Date.now()}.${mime.extension(fileType)}`
-			await fs.copy(filePath, `public/images/${formattedFileName}`)
-		} else {
-			formattedFileName = 'public/thumbnail_placeholder.jpg'
-		}
+		const formattedDate = new Date(data.date).toLocaleDateString()
+		const fileName = await handleImageUpload(data.thumbnail)
 		try {
 			const sql = `INSERT INTO events(userId, title, description, date, thumbnail)\
-			VALUES(${userId}, "${title}", "${description}", "${formattedDate}", "${formattedFileName}")`
+			VALUES(${data.userId}, "${data.title}", "${data.description}", "${formattedDate}", "${fileName}")`
 			const { lastID } = await this.db.run(sql)
 			return lastID
 		} catch (err) {
@@ -78,14 +60,13 @@ class Events {
 	}
 
 	/**
-   * retrieves an event by id
-   * @params {Number} id id of the event
+   * Retrieves an event by id
+   * @param {Number} id id of the event
    * @returns {Object} returns an event
    */
-
 	async getById(id) {
 		console.log('Getting event with id', id)
-		if(!id || isNaN(id)) throw Error('invalid or missing')
+		if (!id || isNaN(id)) throw Error('invalid or missing')
 		const sql = `SELECT * FROM events WHERE id = ${id}`
 		return await this.db.all(sql)
 	}
