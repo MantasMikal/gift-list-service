@@ -45,23 +45,45 @@
 						<h3 class="title--small event__gift-list-title">Gift list</h3>
 						{{#each gifts}}
 						<div class="event__gift-wrapper">
+							{{#if this.price}}
 							<div class="event__gift-price">
 								{{this.price}}£
 							</div>
+							{{/if}}
 							<div class="event__gift-name">
 								{{this.name}}
 							</div>
-							<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
-								rel="noreferer noopener">
-								View
-							</a>
-							<button class="button button--small event__pledge-button">
-								Pledge
-							</button>
-							<label class="event__checkbox">
-								<input type="checkbox" name="event-{{this.id}}" value={{this.name}}>
-								<span class="event__checkbox-checkmark"></span>
-							</label>
+							<div class="event__gift-actions">
+								{{#if this.url}}
+								<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
+									rel="noreferer noopener">
+									View
+								</a>
+								{{/if}}
+								{{#if ../authorised}}
+								<form action="/event/pledge/{{../event.id}}" method="post" class="event__pledge-button">
+									<input hidden type="input" name='eventId' value={{../event.id}} />
+									<input hidden type="input" name='giftId' value={{this.id}} />
+									{{#if this.user}}
+									<div class="event__view-gift-pledged">
+										Pledged by <b>{{this.user}}</b>
+									</div>
+									{{else}}
+									<button type='submit' class="button button--small">
+										Pledge
+									</button>
+									{{/if}}
+								</form>
+								{{/if}}
+								<label class="event__checkbox">
+									{{#if this.user}}
+									<input disabled="disabled" type="checkbox" name="event-{{this.id}}" checked="checked">
+									{{else}}
+									<input disabled="disabled" type="checkbox" name="event-{{this.id}}">
+									{{/if}}
+									<span class="event__checkbox-checkmark"></span>
+								</label>
+							</div>
 						</div>
 						{{/each}}
 					</div>
