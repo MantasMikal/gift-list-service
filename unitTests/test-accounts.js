@@ -2,7 +2,7 @@
 import test from 'ava'
 import { Accounts } from '../modules/accounts.js'
 
-test('REGISTER : register and log in with a valid account', async test => {
+test('ACCOUNTS:register - register and log in with a valid account', async test => {
 	test.plan(1)
 	const account = await new Accounts() // no database specified so runs in-memory
 	const register = await account.register('doej', 'password', 'doej@gmail.com')
@@ -10,7 +10,7 @@ test('REGISTER : register and log in with a valid account', async test => {
 	account.close()
 })
 
-test('REGISTER : register a duplicate username', async test => {
+test('ACCOUNTS:register : register a duplicate username', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -24,7 +24,7 @@ test('REGISTER : register a duplicate username', async test => {
 	}
 })
 
-test('REGISTER : error if blank username', async test => {
+test('ACCOUNTS:register - error if blank username', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -37,7 +37,7 @@ test('REGISTER : error if blank username', async test => {
 	}
 })
 
-test('REGISTER : error if blank password', async test => {
+test('ACCOUNTS:register - error if blank password', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -50,7 +50,7 @@ test('REGISTER : error if blank password', async test => {
 	}
 })
 
-test('REGISTER : error if blank email', async test => {
+test('ACCOUNTS:register - error if blank email', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -63,7 +63,7 @@ test('REGISTER : error if blank email', async test => {
 	}
 })
 
-test('REGISTER : error if duplicate email', async test => {
+test('ACCOUNTS:register - error if duplicate email', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -77,7 +77,7 @@ test('REGISTER : error if duplicate email', async test => {
 	}
 })
 
-test('LOGIN    : invalid username', async test => {
+test('ACCOUNTS:login - invalid username', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {
@@ -91,7 +91,7 @@ test('LOGIN    : invalid username', async test => {
 	}
 })
 
-test('LOGIN    : invalid password', async test => {
+test('ACCOUNTS:login - invalid password', async test => {
 	test.plan(1)
 	const account = await new Accounts()
 	try {

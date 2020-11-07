@@ -34,7 +34,9 @@
 			<div class="events__wrapper">
 				{{#each events}}
 				<a class="events__event" href="/event/{{this.id}}">
-					<img src="/images/{{this.thumbnail}}" class="events__event-thumbnail" alt={{this.name}} />
+					<div class="events__event-thumbnail-wrapper">
+						<div style="background-image: url('/images/{{this.thumbnail}}');" class="events__event-thumbnail"></div>
+					</div>
 					<div class="events__event-details">
 						<h3 class="title--small events__event-title">{{this.title}}</h3>
 						<time class="events__event-creation-date">{{this.date}}</time>
