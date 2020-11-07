@@ -28,17 +28,18 @@ class Accounts {
 		Array.from(arguments).forEach((val) => {
 			if (val.length === 0) throw new Error('missing field')
 		})
-		let sql = `SELECT COUNT(id) as records FROM users WHERE user="${user}";`
-		const data = await this.db.get(sql)
+		let sql = 'SELECT COUNT(id) as records FROM users WHERE user = $1;'
+		const data = await this.db.get(sql, user)
 		if (data.records !== 0)
 			throw new Error(`username "${user}" already in use`)
-		sql = `SELECT COUNT(id) as records FROM users WHERE email="${email}";`
-		const emails = await this.db.get(sql)
+		sql = 'SELECT COUNT(id) as records FROM users WHERE email = $1;'
+		const emails = await this.db.get(sql, email)
 		if (emails.records !== 0)
 			throw new Error(`email address "${email}" is already in use`)
 		pass = await bcrypt.hash(pass, saltRounds)
-		sql = `INSERT INTO users(user, pass, email) VALUES("${user}", "${pass}", "${email}")`
-		await this.db.run(sql)
+		sql = 'INSERT INTO users(user, pass, email) VALUES($1, $2, $3)'
+		const values = [user, pass, email]
+		await this.db.run(sql, values)
 		return true
 	}
 
@@ -49,11 +50,11 @@ class Accounts {
    * @returns {Number} returns user id if credentials are valid
    */
 	async login(username, password) {
-		let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
-		const records = await this.db.get(sql)
+		let sql = 'SELECT count(id) AS count FROM users WHERE user = $1;'
+		const records = await this.db.get(sql, username)
 		if (!records.count) throw new Error(`username "${username}" not found`)
-		sql = `SELECT id, pass FROM users WHERE user = "${username}";`
-		const record = await this.db.get(sql)
+		sql = 'SELECT id, pass FROM users WHERE user = $1;'
+		const record = await this.db.get(sql, username)
 		const valid = await bcrypt.compare(password, record.pass)
 		if (valid === false)
 			throw new Error(`invalid password for account "${username}"`)
@@ -68,8 +69,8 @@ class Accounts {
 
 	async getById(id) {
 		if (!id || isNaN(id)) throw Error('invalid or missing id')
-		const sql = `SELECT * FROM users WHERE id = ${id}`
-		return await this.db.all(sql)
+		const sql = 'SELECT * FROM users WHERE id = $1'
+		return await this.db.all(sql, id)
 	}
 
 	async close() {
