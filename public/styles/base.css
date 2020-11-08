@@ -49,6 +49,10 @@ input {
   cursor: pointer;
 } 
 
+.button--green {
+  background-color: var(--color-green);
+}
+
 @media screen and (min-width: 600px) {
   .button {
     padding: 8px 16px;
