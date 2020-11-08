@@ -14,7 +14,8 @@ class Events {
 					title TEXT NOT NULL,\
 					description TEXT, \
           date INTEGER NOT NULL, \
-          thumbnail TEXT,\
+					thumbnail TEXT,\
+					status TEXT,\
           FOREIGN KEY(userId) REFERENCES users(id)\
         );'
 			await this.db.run(sql)
@@ -49,8 +50,8 @@ class Events {
 		const formattedDate = new Date(data.date).toLocaleDateString()
 		const fileName = await handleImageUpload(data.thumbnail)
 		try {
-			const sql = 'INSERT INTO events(userId, title, description, date, thumbnail)\
-			VALUES($1, $2, $3, $4, $5)'
+			const sql = 'INSERT INTO events(userId, title, description, date, thumbnail, status)\
+			VALUES($1, $2, $3, $4, $5, "Active")'
 			const values = [data.userId, data.title, data.description, formattedDate, fileName]
 			const { lastID } = await this.db.run(sql, values)
 			return lastID
@@ -74,6 +75,25 @@ class Events {
 
 	async close() {
 		await this.db.close()
+	}
+
+	/**
+	 * Updates event status by id
+	 * @param {Number} id
+	 * @param {String} status
+	 * @returns {Boolean} true if success
+	 */
+	async updateStatusById(id, status) {
+		if(!id || isNaN(id) || !status) throw Error('Missing or inavild fields')
+		const sql = 'UPDATE events SET status = $1 WHERE id = $2;'
+		const values = [status, id]
+		try {
+			await this.db.run(sql, values)
+			return true
+		} catch (err) {
+			console.log(err)
+			throw err
+		}
 	}
 }
 

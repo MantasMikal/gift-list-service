@@ -97,6 +97,20 @@
   margin-bottom: 8px;
 }
 
+.event__status {
+  display: flex;
+  align-items: center;
+}
+
+.event__status span {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.event__status button {
+  margin-left: 10px;
+}
+
 .event__gift-wrapper {
   background-color: var(--color-white);
   padding: 8px;
