@@ -11,6 +11,7 @@ const mockEvents = [
 		description: 'Description',
 		date: '11/12/2020',
 		thumbnail: 'thumbnail_placeholder.jpg',
+		status: 'Active'
 	},
 	{
 		userId: 1,
@@ -18,6 +19,7 @@ const mockEvents = [
 		description: 'Description2',
 		date: '11/12/2020',
 		thumbnail: 'thumbnail_placeholder.jpg',
+		status: 'Active'
 	},
 ]
 
@@ -89,12 +91,12 @@ test('EVENTS:all - return all events', async(test) => {
 	await events.add(mockEvents[1])
 	const allEvents = await events.all()
 
-	const expectedGifts = [
+	const expectedEvents = [
 		{id: 1, ...mockEvents[0]},
 		{id: 2, ...mockEvents[1]}
 	]
 
-	test.deepEqual(allEvents, expectedGifts, 'does not return all added events')
+	test.deepEqual(allEvents, expectedEvents, 'does not return all added events')
 	events.close()
 })
 
@@ -119,10 +121,56 @@ test('EVENTS:getById - should return event by id', async(test) => {
 
 	const allEvents = await events.getById(1)
 
-	const expectedGifts = [
+	const expectedEvents = [
 		{id: 1, ...mockEvents[0]},
 	]
 
-	test.deepEqual(allEvents, expectedGifts, 'does not return all events by id')
+	test.deepEqual(allEvents, expectedEvents, 'does not return all events by id')
 	events.close()
+})
+
+test('EVENTS:updateStatusById - should update event status by id', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+
+	await events.add(mockEvents[0])
+
+	await events.updateStatusById(1, 'Complete')
+
+	const event = await events.getById(1)
+	const expectedEvent = [
+		{id: 1, ...mockEvents[0], status: 'Complete'},
+	]
+
+	test.deepEqual(event, expectedEvent, 'does not update events status by id')
+	events.close()
+})
+
+
+test('EVENTS:updateStatusById - error if eventId missing' , async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	await events.add(mockEvents[0])
+	try {
+		await events.updateStatusById(null, 'Complete')
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'Missing or inavild fields', 'incorrect error message')
+	} finally {
+		events.close()
+	}
+})
+
+test('EVENTS:updateStatusById - error if status missing' , async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	await events.add(mockEvents[0])
+	try {
+		await events.updateStatusById(1, null)
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'Missing or inavild fields', 'incorrect error message')
+	} finally {
+		events.close()
+	}
 })

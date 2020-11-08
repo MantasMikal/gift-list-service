@@ -49,8 +49,8 @@ eventRouter.get('/:id', async(ctx) => {
 	try {
 		const event = await events.getById(id)
 		const giftList = await gifts.getEventGifts(id)
-		ctx.hbs.event = event[0]
-		ctx.hbs.gifts = giftList
+		ctx.hbs.data = { event: event[0], gifts: giftList }
+		ctx.hbs.canComplete = event[0].status !== 'Complete' || event[0].userId !== ctx.session.userId
 		await ctx.render('event', ctx.hbs)
 	} catch (err) {
 		console.log(err)
@@ -59,6 +59,23 @@ eventRouter.get('/:id', async(ctx) => {
 		events.close()
 		gifts.close()
 		users.close()
+	}
+})
+
+eventRouter.post('/:id/complete', async(ctx) => {
+	const { id } = ctx.params
+	const events = await new Events(dbName)
+	try {
+		console.log('HI')
+		await events.updateStatusById(id, 'Complete')
+		return ctx.redirect(
+			`/event/${id}/?msg=Event status has been updated!`
+		)
+	} catch(err) {
+		console.log(err)
+		await ctx.render('error', ctx.hbs)
+	} finally {
+		events.close()
 	}
 })
 
