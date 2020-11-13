@@ -1,9 +1,6 @@
 import test from 'ava'
 import { Events } from '../modules/events.js'
 
-// TODO
-// How to mock file uploads?
-
 const mockEvents = [
 	{
 		userId: 1,
@@ -121,9 +118,7 @@ test('EVENTS:getById - should return event by id', async(test) => {
 
 	const allEvents = await events.getById(1)
 
-	const expectedEvents = [
-		{id: 1, ...mockEvents[0]},
-	]
+	const expectedEvents = {id: 1, ...mockEvents[0]}
 
 	test.deepEqual(allEvents, expectedEvents, 'does not return all events by id')
 	events.close()
@@ -132,15 +127,10 @@ test('EVENTS:getById - should return event by id', async(test) => {
 test('EVENTS:updateStatusById - should update event status by id', async(test) => {
 	test.plan(1)
 	const events = await new Events()
-
 	await events.add(mockEvents[0])
+	const event = await events.updateStatusById(1, 'Complete')
+	const expectedEvent = {id: 1, ...mockEvents[0], status: 'Complete'}
 
-	await events.updateStatusById(1, 'Complete')
-
-	const event = await events.getById(1)
-	const expectedEvent = [
-		{id: 1, ...mockEvents[0], status: 'Complete'},
-	]
 
 	test.deepEqual(event, expectedEvent, 'does not update events status by id')
 	events.close()
@@ -170,6 +160,82 @@ test('EVENTS:updateStatusById - error if status missing' , async(test) => {
 		test.fail('error not thrown')
 	} catch(err) {
 		test.is(err.message, 'Missing or inavild fields', 'incorrect error message')
+	} finally {
+		events.close()
+	}
+})
+
+test('EVENTS:getEventOwner - returns the event owner', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+
+	await events.setUpTestDatabase()
+	const user = await events.getEventOwner(1)
+	test.deepEqual(user, {
+		id: 1,
+		user: 'jeff',
+		pass: 'password',
+		email: 'jeff@email.com'
+	})
+	events.close()
+})
+
+
+test('EVENTS:getEventOwner - should error if id is invalid', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	await events.setUpTestDatabase()
+	try {
+		await events.getEventOwner('inv\alid')
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'Missing or invalid fields', 'incorrect error message')
+	} finally {
+		events.close()
+	}
+})
+
+test('EVENTS:getEventOwner - should return undefined if event does not exist', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	await events.setUpTestDatabase()
+	const user = await events.getEventOwner(777)
+	test.deepEqual(user, undefined)
+	events.close()
+})
+
+
+test('EVENTS:getEventPledgedGiftsUsers -  should return all users that pledged gift in an event', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	await events.setUpTestDatabase()
+	const users = await events.getEventPledgedGiftsUsers(1)
+	const expectedUsers = [
+		{ id: 1, user: 'jeff', pass: 'password', email: 'jeff@email.com' },
+		{
+			id: 2,
+			user: 'jeff2',
+			pass: 'password2',
+			email: 'jeff2@email.com',
+		},
+	]
+
+	test.deepEqual(
+		users,
+		expectedUsers,
+		'Does not return all users that pledged gifts in an event'
+	)
+	events.close()
+})
+
+test('EVENTS:getEventPledgedGiftsUsers - error if id missing', async(test) => {
+	test.plan(1)
+	const events = await new Events()
+	try {
+		await events.getEventPledgedGiftsUsers('p')
+		test.fail('error not thrown')
+	} catch (err) {
+		test.is(err.message, 'Missing or invalid fields', 'incorrect error message')
 	} finally {
 		events.close()
 	}
