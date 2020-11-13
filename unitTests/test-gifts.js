@@ -33,7 +33,6 @@ test('GIFTS:add - add new gift', async(test) => {
 	gifts.close()
 })
 
-
 test('GIFTS:add - error if name missing', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
@@ -110,14 +109,13 @@ test('GIFTS:getEventGifts : should retrieve all gifts associated with event', as
 
 	const eventGifts = await gifts.getEventGifts(1)
 	const expectedGifts = [
-		{id: 1, ...mockGifts[0]},
-		{id: 2, ...mockGifts[1]},
+		{ id: 1, ...mockGifts[0] },
+		{ id: 2, ...mockGifts[1] },
 	]
 
 	test.deepEqual(eventGifts, expectedGifts)
 	gifts.close()
 })
-
 
 test('GIFTS:getEventGifts - should correctly update user by eventId and giftId', async(test) => {
 	test.plan(1)
@@ -128,9 +126,7 @@ test('GIFTS:getEventGifts - should correctly update user by eventId and giftId',
 	await gifts.pledgeGift(3, 'jeff', 3)
 	const gift = await gifts.getEventGifts(3)
 
-	const expectedGift = [
-		{id: 3, ...mockGifts[2], user: 'jeff'},
-	]
+	const expectedGift = [{ id: 3, ...mockGifts[2], user: 'jeff' }]
 
 	test.deepEqual(gift, expectedGift, 'user was not updated')
 })
@@ -144,25 +140,18 @@ test('GIFTS:pledgeGift -  should correctly update user by eventId and giftId', a
 	await gifts.pledgeGift(3, 'jeff', 3)
 	const gift = await gifts.getEventGifts(3)
 
-	const expectedGift = [
-		{id: 3, ...mockGifts[2], user: 'jeff'},
-	]
+	const expectedGift = [{ id: 3, ...mockGifts[2], user: 'jeff' }]
 
-	test.deepEqual(gift, expectedGift, 'user was not updated')
+	test.deepEqual(gift, expectedGift, 'gift was not updated')
 })
 
-test('GIFTS:pledgeGift - error if user missing', async(test) => {
+test('GIFTS:pledgeGift -  should return updated gift', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
 	await gifts.add(mockGifts[0])
-	try {
-		await gifts.pledgeGift(1, null, 1)
-		test.fail('error not thrown')
-	} catch (err) {
-		test.is(err.message, 'missing or invalid field', 'incorrect error message')
-	} finally {
-		gifts.close()
-	}
+	const gift = await gifts.pledgeGift(1, 'jeff', 1)
+	const expectedGift = { id: 1, ...mockGifts[0], user: 'jeff' }
+	test.deepEqual(gift, expectedGift, 'gift was not returned')
 })
 
 test('GIFTS:pledgeGift - error if eventId missing', async(test) => {
@@ -179,12 +168,12 @@ test('GIFTS:pledgeGift - error if eventId missing', async(test) => {
 	}
 })
 
-test('GIFTS:pledgeGift - error if giftId missing', async(test) => {
+test('GIFTS:pledgeGift - error if user missing', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
 	await gifts.add(mockGifts[0])
 	try {
-		await gifts.pledgeGift(null, 'jeff', 1)
+		await gifts.pledgeGift(1, null, 1)
 		test.fail('error not thrown')
 	} catch (err) {
 		test.is(err.message, 'missing or invalid field', 'incorrect error message')
@@ -193,3 +182,25 @@ test('GIFTS:pledgeGift - error if giftId missing', async(test) => {
 	}
 })
 
+test('GIFTS:getById - error if id missing', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.add(mockGifts[0])
+	try {
+		await gifts.getById(undefined)
+		test.fail('error not thrown')
+	} catch (err) {
+		test.is(err.message, 'invalid or missing id', 'incorrect error message')
+	} finally {
+		gifts.close()
+	}
+})
+
+test('GIFTS:getById -  should return gift by id', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.add(mockGifts[0])
+	const gift = await gifts.getById(1)
+	const expectedGift = { id: 1, ...mockGifts[0] }
+	test.deepEqual(gift, expectedGift, 'gift was not returned')
+})

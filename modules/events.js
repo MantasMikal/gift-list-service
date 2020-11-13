@@ -2,6 +2,7 @@
 
 import sqlite from 'sqlite-async'
 import handleImageUpload from '../lib/image-upload.js'
+import { eventDatabaseSetup } from '../lib/test-setup-sql-queries.js'
 
 class Events {
 	constructor(dbName = ':memory:') {
@@ -70,7 +71,7 @@ class Events {
 		console.log('Getting event with id', id)
 		if (!id || isNaN(id)) throw Error('invalid or missing')
 		const sql = 'SELECT * FROM events WHERE id = $1'
-		return await this.db.all(sql, id)
+		return await this.db.get(sql, id)
 	}
 
 	async close() {
@@ -81,7 +82,7 @@ class Events {
 	 * Updates event status by id
 	 * @param {Number} id
 	 * @param {String} status
-	 * @returns {Boolean} true if success
+	 * @returns {Object} updated event if the operation successful
 	 */
 	async updateStatusById(id, status) {
 		if(!id || isNaN(id) || !status) throw Error('Missing or inavild fields')
@@ -89,7 +90,51 @@ class Events {
 		const values = [status, id]
 		try {
 			await this.db.run(sql, values)
-			return true
+			return await this.getById(id)
+		} catch (err) {
+			console.log(err)
+			throw err
+		}
+	}
+
+	/**
+	 * Gets the event owner
+	 * @param {Number} id of the event
+	 * @returns {Object} user
+	 */
+	async getEventOwner(id) {
+		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
+		const sql = 'SELECT users.* FROM events INNER JOIN users ON events.userId = users.id WHERE events.id = $1'
+		try {
+			const user = await this.db.get(sql, id)
+			return user
+		} catch (err) {
+			console.log(err)
+			throw err
+		}
+	}
+
+
+	/**
+	 * Retrieves all users that have agreed to pledge gifts
+	 * for an event
+	 * @param {Number} id event id
+	 * @returns {Array} array of users
+	 */
+	async getEventPledgedGiftsUsers(id) {
+		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
+		const sql = 'SELECT users.* FROM gifts\
+			INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'
+		return await this.db.all(sql, id)
+	}
+
+	/**
+	 * Test setup
+	 */
+	async setUpTestDatabase() {
+		// TODO Check env
+		try {
+			await this.db.exec(eventDatabaseSetup)
 		} catch (err) {
 			console.log(err)
 			throw err
