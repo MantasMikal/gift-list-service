@@ -3,8 +3,10 @@ import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
+import dotenv from 'dotenv'
 import { apiRouter } from './routes/routes.js'
 
+dotenv.config()
 const app = new Koa()
 app.keys = ['darkSecret']
 
@@ -20,6 +22,7 @@ app.use( async(ctx, next) => {
 	ctx.hbs = {
 		authorised: ctx.session.authorised,
 		user: ctx.session.user,
+		email: ctx.session.email,
 		userId: ctx.session.userId,
 		host: `https://${ctx.host}`
 	}

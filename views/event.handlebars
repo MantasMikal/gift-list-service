@@ -68,8 +68,8 @@
 								</a>
 								{{/if}}
 								{{#if ../authorised}}
-								<form action="/event/pledge/{{../event.id}}" method="post" class="event__pledge-button">
-									<input hidden type="input" name='eventId' value={{../event.id}} />
+								<form action="/event/pledge/{{../data.event.id}}/{{this.id}}" method="post" class="event__pledge-button">
+									<input hidden type="input" name='eventId' value={{../data.event.id}} />
 									<input hidden type="input" name='giftId' value={{this.id}} />
 									{{#if this.user}}
 									<div class="event__view-gift-pledged">
