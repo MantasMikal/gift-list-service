@@ -15,8 +15,8 @@ const emailTemplate = {
 
 test('MAILER:mailTo should send an email', async(test) => {
 	test.plan(1)
-  test.pass('Need to add test')
-  // try {
+	test.pass('Need to add test')
+	// try {
 	// 	const res = await mailTo(['example@example.com'], emailTemplate)
 	// 	if(res.accepted) test.pass('Email was sent')
 	// 	else if (res.rejected) test.fail('Email was rejected')

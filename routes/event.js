@@ -12,7 +12,7 @@ eventRouter.get('/new', async(ctx) => {
 	try {
 		console.log(ctx.hbs)
 		if (ctx.hbs.authorised !== true)
-			return ctx.redirect('/login?msg=you need to log in&referrer=/event/new')
+			return ctx.redirect('/login?msg=You need to log in&referrer=/event/new')
 		await ctx.render('new-event', ctx.hbs)
 	} catch (err) {
 		ctx.hbs.error = err.message
