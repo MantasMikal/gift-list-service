@@ -1,52 +1,57 @@
 {
-	"name": "10_auth",
-	"version": "1.1.3",
-	"description": "A Gift List Service",
-	"main": "index.js",
-	"engines": {
-		"node": "12.x"
-	},
-	"type": "module",
-	"ava": {
-		"verbose": true,
-		"require": [
-			"esm"
-		]
-	},
-	"scripts": {
-		"packagedeps": "./node_modules/.bin/depcheck .",
-		"dependency": "./node_modules/.bin/dependency-check -i bcrypt --unused --no-dev . && node_modules/.bin/dependency-check --missing .",
-		"start": "node index.js",
-		"jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
-		"linter": "node_modules/.bin/eslint .",
-		"fix": "node_modules/.bin/eslint . --fix",
-		"test": "ava"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"bcrypt": "^5.0.0",
-		"bcrypt-promise": "^2.0.0",
-		"fs-extra": "^9.0.1",
-		"handlebars": "^4.7.6",
-		"koa": "^2.13.0",
-		"koa-body": "^4.2.0",
-		"koa-router": "^9.4.0",
-		"koa-session": "^6.0.0",
-		"koa-static": "^5.0.0",
-		"koa-views": "^6.3.0",
-		"mime-types": "^2.1.27",
-		"sqlite-async": "^1.1.0"
-	},
-	"devDependencies": {
-		"ava": "^3.12.1",
-		"depcheck": "^1.2.0",
-		"dependency": "0.0.1",
-		"dependency-check": "^4.1.0",
-		"eslint": "^7.8.1",
-		"esm": "^3.2.25",
-		"jscpd": "^3.3.19",
-		"jsdoc": "^3.6.5",
-		"jsdoc-route-plugin": "^0.1.0"
-	}
+  "name": "gift-list",
+  "version": "1.1.3",
+  "description": "A Gift List Service",
+  "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
+  "type": "module",
+  "ava": {
+    "verbose": true,
+    "require": [
+      "esm"
+    ],
+    "files": [
+      "unitTests/**/*"
+    ]
+  },
+  "scripts": {
+    "packagedeps": "./node_modules/.bin/depcheck .",
+    "dependency": "./node_modules/.bin/dependency-check -i bcrypt --unused --no-dev . && node_modules/.bin/dependency-check --missing .",
+    "start": "node index.js",
+    "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
+    "linter": "node_modules/.bin/eslint .",
+    "fix": "node_modules/.bin/eslint . --fix",
+    "test": "ava"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "bcrypt-promise": "^2.0.0",
+    "dotenv": "^8.2.0",
+    "fs-extra": "^9.0.1",
+    "handlebars": "^4.7.6",
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-router": "^9.4.0",
+    "koa-session": "^6.0.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.3.0",
+    "mime-types": "^2.1.27",
+    "nodemailer": "^6.4.16",
+    "sqlite-async": "^1.1.0"
+  },
+  "devDependencies": {
+    "ava": "^3.12.1",
+    "depcheck": "^1.2.0",
+    "dependency": "0.0.1",
+    "dependency-check": "^4.1.0",
+    "eslint": "^7.8.1",
+    "esm": "^3.2.25",
+    "jscpd": "^3.3.19",
+    "jsdoc": "^3.6.5",
+    "jsdoc-route-plugin": "^0.1.0"
+  }
 }

@@ -3,13 +3,14 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>{{event.title}} | Gift List </title>
+	<title>{{data.event.title}} | Gift List </title>
 	<meta name="description" content="Gift List Service">
 	<meta name="author" content="Mantas Mikalauskas">
 	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/event.css" type="text/css" rel="stylesheet" />
+	<script type='text/javascript' src="{{host}}/browser/event.js"></script>
 </head>
 
 <body>
@@ -32,36 +33,64 @@
 		<div class="container--center container--gutter container--wide">
 			<div class="event__wrapper">
 				<div class="event__thumbnail-wrapper">
-					<div class="event__thumbnail" style="background-image: url('/images/{{event.thumbnail}}');"
-						alt={{event.title}}> </div>
+					<div class="event__thumbnail" style="background-image: url('/images/{{data.event.thumbnail}}');"
+						alt={{data.event.title}}> </div>
 				</div>
 				<div class="event__inner">
 					<div class="event__details">
-						<h2 class="title event__title">{{event.title}}</h2>
-						<time class="event__date">{{event.date}}</time>
-						<p class="event__description">{{event.description}}</p>
+						<h2 class="title event__title">{{data.event.title}}</h2>
+						<time class="event__date">{{data.event.date}}</time>
+						<p class="event__description">{{data.event.description}}</p>
+						<div class="event__status">
+							Status:&nbsp;<span>{{data.event.status}}</span>
+							{{#if canComplete}}
+							<button class="button button--small button--green" onclick="handleEventStatus({{data.event.id}})">Mark as completed</button>
+							{{/if}}
+						</div>
 					</div>
 					<div class="event__gift-list">
 						<h3 class="title--small event__gift-list-title">Gift list</h3>
-						{{#each gifts}}
+						{{#each data.gifts}}
 						<div class="event__gift-wrapper">
+							{{#if this.price}}
 							<div class="event__gift-price">
 								{{this.price}}£
 							</div>
+							{{/if}}
 							<div class="event__gift-name">
 								{{this.name}}
 							</div>
-							<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
-								rel="noreferer noopener">
-								View
-							</a>
-							<button class="button button--small event__pledge-button">
-								Pledge
-							</button>
-							<label class="event__checkbox">
-								<input type="checkbox" name="event-{{this.id}}" value={{this.name}}>
-								<span class="event__checkbox-checkmark"></span>
-							</label>
+							<div class="event__gift-actions">
+								{{#if this.url}}
+								<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
+									rel="noreferer noopener">
+									View
+								</a>
+								{{/if}}
+								{{#if ../authorised}}
+								<form action="/event/pledge/{{../data.event.id}}/{{this.id}}" method="post" class="event__pledge-button">
+									<input hidden type="input" name='eventId' value={{../data.event.id}} />
+									<input hidden type="input" name='giftId' value={{this.id}} />
+									{{#if this.user}}
+									<div class="event__view-gift-pledged">
+										Pledged by <b>{{this.user}}</b>
+									</div>
+									{{else}}
+									<button type='submit' class="button button--small">
+										Pledge
+									</button>
+									{{/if}}
+								</form>
+								{{/if}}
+								<label class="event__checkbox">
+									{{#if this.user}}
+									<input disabled="disabled" type="checkbox" name="event-{{this.id}}" checked="checked">
+									{{else}}
+									<input disabled="disabled" type="checkbox" name="event-{{this.id}}">
+									{{/if}}
+									<span class="event__checkbox-checkmark"></span>
+								</label>
+							</div>
 						</div>
 						{{/each}}
 					</div>
