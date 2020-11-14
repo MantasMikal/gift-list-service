@@ -47,7 +47,7 @@ publicRouter.post('/register', async ctx => {
 	const account = await new Accounts(dbName)
 	try {
 		await account.register(ctx.request.body.user, ctx.request.body.pass, ctx.request.body.email)
-		ctx.redirect(`/login?msg=new user "${ctx.request.body.user}" added, you need to log in`)
+		ctx.redirect(`/login?msg=New user "${ctx.request.body.user}" added, you need to log in`)
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		ctx.hbs.body = ctx.request.body
@@ -70,7 +70,7 @@ publicRouter.get('/validate/:user/:token', async ctx => {
 			const now = Math.floor(Date.now() / milliseconds)
 			const account = await new Accounts(dbName)
 			await account.checkToken(ctx.params.user, ctx.params.token, now)
-			ctx.hbs.msg = `account "${ctx.params.user}" has been validated`
+			ctx.hbs.msg = `Account "${ctx.params.user}" has been validated`
 			await ctx.render('login', ctx.hbs)
 		}
 	} catch(err) {
@@ -94,7 +94,7 @@ publicRouter.post('/login', async ctx => {
 		ctx.session.user = body.user
 		ctx.session.email = body.email
 		const referrer = body.referrer || '/'
-		return ctx.redirect(`${referrer}?msg=you are now logged in...`)
+		return ctx.redirect(`${referrer}?msg=You are now logged in`)
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		await ctx.render('login', ctx.hbs)
@@ -108,7 +108,7 @@ publicRouter.get('/logout', async ctx => {
 	delete ctx.session.user
 	delete ctx.session.userId
 	delete ctx.session.email
-	ctx.redirect('/?msg=you are now logged out')
+	ctx.redirect('/?msg=You are now logged out')
 })
 
 export { publicRouter }

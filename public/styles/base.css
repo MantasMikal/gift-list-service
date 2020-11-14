@@ -124,3 +124,25 @@ input {
   }
 }
 
+/* Feedback messages */
+.msg {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  animation: fadein 0.5s, fadeout 0.5s 2.5s forwards;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 100;
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 20px; opacity: 1;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
