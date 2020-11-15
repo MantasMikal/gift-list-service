@@ -5,12 +5,14 @@
  * @param {Object} gift
  * @returns {Object} body as html and email subject
  */
-export const createGiftPledgeTemplate = (user, gift) => {
+export const createGiftPledgeTemplate = (user, gift, eventUrl) => {
 	const bodyHtml = `
+	<p>${user} agreed to pledge one of your items</p>
   <p>Item name: ${gift.name}</p>
-  <p>Item price: ${gift.price || 'Price is not specified'}</p>
+	<p>Item price: ${gift.price || 'Price is not specified'}</p>
+	<a href="${eventUrl}">Go to the event page</a>
   `
-	const subject = `${user} agreed to pledge one of your items`
+	const subject = 'One of your items has been pledged!'
 	return { bodyHtml, subject }
 }
 

@@ -35,7 +35,7 @@
 		<div class="container--center container--gutter container--wide">
 			<h2 class="title">All Events</h2>
 			<div class="events__wrapper">
-				{{#each events}}
+				{{#each data.events}}
 				<a class="events__event" href="/event/{{this.id}}">
 					<div class="events__event-thumbnail-wrapper">
 						<div style="background-image: url('/images/{{this.thumbnail}}');" class="events__event-thumbnail"></div>

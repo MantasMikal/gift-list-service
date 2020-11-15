@@ -38,15 +38,15 @@
 			<form action="/register" enctype="multipart/form-data" method="post">
 				<div class="login__field">
 					<label for="user">Username</label><br />
-					<input type="text" name="user" placeholder="Your username" value="{{body.user}}" required>
+					<input type="text" name="user" placeholder="Your username" value="{{data.body.user}}" required>
 				</div>
 				<div class="login__field">
 					<label for="pass">Password</label><br />
-					<input type="password" name="pass" placeholder="Your password" value="{{body.pass}}" required>
+					<input type="password" name="pass" placeholder="Your password" value="{{data.body.pass}}" required>
 				</div>
 				<div>
 					<label for="email">Email</label><br />
-					<input type="email" name="email" placeholder="Your email address" value="{{body.email}}" required>
+					<input type="email" name="email" placeholder="Your email address" value="{{data.body.email}}" required>
 				</div>
 			<br />
 				<button class="button" type="submit">Register</button>
