@@ -69,7 +69,7 @@ echo 'Checking code style and fixing errors...'
 ./node_modules/.bin/eslint . --fix
 
 echo 'Running test suites...'
-./node_modules/.bin/ava
+NODE_ENV=development ./node_modules/.bin/ava
 
 echo 'Generating JsDoc...'
 

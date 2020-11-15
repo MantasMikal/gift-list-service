@@ -18,10 +18,9 @@ const dbName = 'website.db'
  */
 publicRouter.get('/', async ctx => {
 	const events = await new Events(dbName)
-
 	try {
 		const allEvents = await events.all()
-		ctx.hbs.events = allEvents
+		ctx.hbs.data = { events: allEvents }
 		await ctx.render('index', ctx.hbs)
 	} catch(err) {
 		await ctx.render('error', ctx.hbs)
@@ -49,9 +48,7 @@ publicRouter.post('/register', async ctx => {
 		await account.register(ctx.request.body.user, ctx.request.body.pass, ctx.request.body.email)
 		ctx.redirect(`/login?msg=New user "${ctx.request.body.user}" added, you need to log in`)
 	} catch(err) {
-		ctx.hbs.msg = err.message
-		ctx.hbs.body = ctx.request.body
-		console.log(ctx.hbs)
+		ctx.hbs.data = { error: err.message, body: ctx.request.body }
 		await ctx.render('register', ctx.hbs)
 	} finally {
 		account.close()
@@ -70,7 +67,7 @@ publicRouter.get('/validate/:user/:token', async ctx => {
 			const now = Math.floor(Date.now() / milliseconds)
 			const account = await new Accounts(dbName)
 			await account.checkToken(ctx.params.user, ctx.params.token, now)
-			ctx.hbs.msg = `Account "${ctx.params.user}" has been validated`
+			ctx.hbs.data = { msg: `Account "${ctx.params.user}" has been validated` }
 			await ctx.render('login', ctx.hbs)
 		}
 	} catch(err) {
@@ -84,7 +81,7 @@ publicRouter.get('/login', async ctx => {
 
 publicRouter.post('/login', async ctx => {
 	const account = await new Accounts(dbName)
-	ctx.hbs.body = ctx.request.body
+	ctx.hbs.data = { body: ctx.request.body }
 	try {
 		const body = ctx.request.body
 		const id = await account.login(body.user, body.pass)
@@ -96,7 +93,7 @@ publicRouter.post('/login', async ctx => {
 		const referrer = body.referrer || '/'
 		return ctx.redirect(`${referrer}?msg=You are now logged in`)
 	} catch(err) {
-		ctx.hbs.msg = err.message
+		ctx.hbs.data = { error: err.message }
 		await ctx.render('login', ctx.hbs)
 	} finally {
 		account.close()
