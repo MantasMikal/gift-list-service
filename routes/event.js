@@ -15,7 +15,7 @@ eventRouter.get('/new', async(ctx) => {
 			return ctx.redirect('/login?msg=You need to log in&referrer=/event/new')
 		await ctx.render('new-event', ctx.hbs)
 	} catch (err) {
-		ctx.hbs.error = err.message
+		ctx.hbs.data = { error: err.message }
 		await ctx.render('error', ctx.hbs)
 	}
 })
@@ -32,7 +32,7 @@ eventRouter.post('/new', async(ctx) => {
 		return ctx.redirect('/?msg=New event has been added')
 	} catch (err) {
 		console.log(err)
-		ctx.hbs.msg = err.message
+		ctx.hbs.data = { error: err.message }
 		await ctx.render('error', ctx.hbs)
 	} finally {
 		events.close()
@@ -80,19 +80,19 @@ eventRouter.post('/:id/complete', async(ctx) => {
 
 eventRouter.post('/pledge/:eventId/:giftId', async(ctx) => {
 	const { eventId, giftId } = ctx.params
+	const eventUrl = `https://${ctx.host}/event/${eventId}`
 	const gifts = await new Gifts(dbName)
 	const events = await new Events(dbName)
 	try {
 		const gift = await gifts.pledgeGift(giftId, ctx.session.user, eventId)
 		const eventOwner = await events.getEventOwner(eventId)
-		await mailTo([eventOwner.email], createGiftPledgeTemplate(ctx.session.user, gift))
+		await mailTo([eventOwner.email], createGiftPledgeTemplate(ctx.session.user, gift, eventUrl))
 		return ctx.redirect(
 			`/event/${eventId}/?msg=You agreed to pledge the gift!`
 		)
 	} catch (err) {
 		console.log(err)
-		ctx.hbs.msg = err.message
-		ctx.hbs.body = ctx.request.body
+		ctx.hbs.data = { error: err.message, body: ctx.request.body }
 		await ctx.render('error', ctx.hbs)
 	} finally {
 		gifts.close()

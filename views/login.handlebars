@@ -37,11 +37,11 @@
 			<form action="/login" method="post">
 				<div class="login__field">
 					<label for="user">Username</label><br />
-					<input type="text" name="user" placeholder="your username" value="{{body.user}}" autofocus>
+					<input type="text" name="user" placeholder="your username" value="{{data.body.user}}" autofocus>
 				</div>
 				<div class="login__field">
 					<label for="pass">Password</label><br />
-					<input type="password" name="pass" placeholder="your password" value="{{body.pass}}">
+					<input type="password" name="pass" placeholder="your password" value="{{data.body.pass}}">
 				</di>
 				<div>
 				<input type="hidden" name="referrer" value="{{referrer}}">
