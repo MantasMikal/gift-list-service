@@ -1,6 +1,8 @@
-/** @module Gifts */
-
 import sqlite from 'sqlite-async'
+
+/**
+ * Represents gifts
+ */
 class Gifts {
 	constructor(dbName = ':memory:') {
 		return (async() => {
@@ -42,11 +44,10 @@ class Gifts {
 	}
 
 	/**
-   * retrieves all gifts of an event
+   * Retrieves all gifts of an event
    * @param {Number} id id of the event
-   * @returns {Object} returns all gifts associated with event id
+   * @returns {Array} array of gifts associated with event id
    */
-
 	async getEventGifts(id) {
 		if(!id || isNaN(id)) {
 			throw Error('invalid or missing id')
@@ -71,9 +72,8 @@ class Gifts {
 	/**
    * Gets gift by id
    * @param {Number} id id of the gift
-   * @returns {Object} returns the gift
+   * @returns {Object} returns the gift object
    */
-
 	async getById(id) {
 		if(!id || isNaN(id)) {
 			throw Error('invalid or missing id')
@@ -88,9 +88,8 @@ class Gifts {
    * @param {Number} giftId id of the gift
 	 * @param {String} user username of the user
 	 * @param {Number} eventId id of the event
-   * @returns {Object} returns gift if operation was successful
+   * @returns {Object} returns gift object if operation was successful
    */
-
 	async pledgeGift(giftId, user, eventId) {
 		if(!user) throw Error('missing or invalid field')
 		Array.from([giftId, eventId]).forEach((val) => {
@@ -108,6 +107,9 @@ class Gifts {
 		}
 	}
 
+	/**
+	 * Closes database connection
+	 */
 	async close() {
 		await this.db.close()
 	}
