@@ -27,7 +27,6 @@ publicRouter.get('/', async ctx => {
 	}
 })
 
-
 /**
  * The user registration page.
  *
@@ -75,10 +74,22 @@ publicRouter.get('/validate/:user/:token', async ctx => {
 	}
 })
 
+/**
+ * The user login page.
+ *
+ * @name Login Page
+ * @route {GET} /login
+ */
 publicRouter.get('/login', async ctx => {
 	await ctx.render('login', ctx.hbs)
 })
 
+/**
+ * Script to authenticate returning users
+ *
+ * @name Login Script
+ * @route {POST} /login
+ */
 publicRouter.post('/login', async ctx => {
 	const account = await new Accounts(dbName)
 	ctx.hbs.data = { body: ctx.request.body }
@@ -100,6 +111,12 @@ publicRouter.post('/login', async ctx => {
 	}
 })
 
+/**
+ * Script to log out
+ *
+ * @name LogOut Script
+ * @route {GET} /logout
+ */
 publicRouter.get('/logout', async ctx => {
 	ctx.session.authorised = null
 	delete ctx.session.user
