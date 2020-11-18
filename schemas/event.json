@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "event": {
+      "id": "#event",
+      "title": "Event",
+      "description": "A event in an event list",
+      "type": "object",
+      "properties": {
+        "title": {
+          "description": "Title of the event",
+          "type": "string"
+        },
+        "date": {
+          "description": "Date of the event",
+          "type": "string"
+        },
+        "eventDescription": {
+          "description": "Description of the event",
+          "type": "string"
+        },
+        "gifts": {
+          "description": "JSON string of array of gift objects",
+          "type": "string"
+        }
+      },
+      "required": ["title", "date", "gifts"],
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "user": {
+      "$id": "#user",
+      "title": "User",
+      "description": "Data to register a new user.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "Unique email address",
+          "type": "string",
+          "format": "email"
+        },
+        "user": {
+          "description": "Unique username",
+          "type": "string",
+          "minLength": 5
+        },
+        "pass": {
+          "description": "Password for registration",
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": ["user", "email", "pass"],
+      "additionalProperties": false
+    }
+  }
+}

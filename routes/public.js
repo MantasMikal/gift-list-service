@@ -12,6 +12,7 @@ publicRouter.use(bodyParser({multipart: true}))
 
 import { Accounts } from '../modules/accounts.js'
 import { Events } from '../modules/events.js'
+import { validateUser } from '../controllers/validation.js'
 
 const dbName = 'website.db'
 
@@ -38,7 +39,7 @@ publicRouter.get('/', async ctx => {
  * @name Register Page
  * @route {GET} /register
  */
-publicRouter.get('/register', async ctx => await ctx.render('register'))
+publicRouter.get('/register', async ctx => await ctx.render('register', ctx.hbs))
 
 /**
  * The script to process new user registrations.
@@ -46,11 +47,12 @@ publicRouter.get('/register', async ctx => await ctx.render('register'))
  * @name Register Script
  * @route {POST} /register
  */
-publicRouter.post('/register', async ctx => {
+publicRouter.post('/register', validateUser, async ctx => {
 	const account = await new Accounts(dbName)
+	const {user, pass, email} = ctx.request.body
 	try {
-		await account.register(ctx.request.body.user, ctx.request.body.pass, ctx.request.body.email)
-		ctx.redirect(`/login?msg=New user "${ctx.request.body.user}" added, you need to log in`)
+		await account.register(user, pass, email)
+		ctx.redirect(`/login?msg=New user "${user}" added, you need to log in`)
 	} catch(err) {
 		ctx.hbs.data = { error: err.message, body: ctx.request.body }
 		await ctx.render('register', ctx.hbs)
