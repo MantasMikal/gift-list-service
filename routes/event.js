@@ -10,35 +10,11 @@ import { Gifts } from '../modules/gifts.js'
 import mailTo from '../service/mailer/mailer.js'
 import { createEventCompleteTemplate, createGiftPledgeTemplate } from '../service/mailer/templates.js'
 import removeDuplicatesByProperty from '../lib/remove-duplicates-by-property.js'
+import { validateEvent } from '../controllers/validation.js'
 
 const eventRouter = new Router({ prefix: '/event' })
 const dbName = 'website.db'
 
-/**
- * The event details page
- *
- * @name Event Page
- * @param id id of the event
- * @route {GET} /event/:id
- */
-eventRouter.get('/:id', async(ctx) => {
-	const { id } = ctx.params
-	const events = await new Events(dbName)
-	const gifts = await new Gifts(dbName)
-	try {
-		const event = await events.getById(id)
-		const giftList = await gifts.getEventGifts(id)
-		ctx.hbs.data = { event: event, gifts: giftList }
-		ctx.hbs.canComplete = event.status !== 'Complete' && event.userId === ctx.session.userId
-		await ctx.render('event', ctx.hbs)
-	} catch (err) {
-		console.log(err)
-		await ctx.render('error', ctx.hbs)
-	} finally {
-		events.close()
-		gifts.close()
-	}
-})
 
 /**
  * The event creation page
@@ -64,7 +40,7 @@ eventRouter.get('/new', async(ctx) => {
  * @name NewEvent Script
  * @route {POST} /event/new
  */
-eventRouter.post('/new', async(ctx) => {
+eventRouter.post('/new', validateEvent, async(ctx) => {
 	const events = await new Events(dbName)
 	const gifts = await new Gifts(dbName)
 	const giftList = JSON.parse(ctx.request.body.gifts)
@@ -86,8 +62,10 @@ eventRouter.post('/new', async(ctx) => {
 
 /**
  * The event details page
- * @name EventDetails Page
- * @route {POST} /event/:id
+ *
+ * @name Event Page
+ * @param id id of the event
+ * @route {GET} /event/:id
  */
 eventRouter.get('/:id', async(ctx) => {
 	const { id } = ctx.params

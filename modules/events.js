@@ -111,7 +111,6 @@ class Events {
 		}
 	}
 
-
 	/**
 	 * Retrieves all users that have agreed to pledge gifts
 	 * for an event
