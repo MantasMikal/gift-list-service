@@ -95,7 +95,7 @@ class Events {
 	}
 
 	/**
-	 * Gets the event owner
+	 * Gets the event owner by event Id
 	 * @param {Number} id of the event
 	 * @returns {Object} user object
 	 */
@@ -118,7 +118,7 @@ class Events {
 	 * @param {Number} id event id
 	 * @returns {Array} array of users
 	 */
-	async getEventPledgedGiftsUsers(id) {
+	async getPledgedGiftsUsers(id) {
 		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
 		const sql = 'SELECT users.* FROM gifts\
 			INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'

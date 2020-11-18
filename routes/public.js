@@ -1,3 +1,8 @@
+/**
+ * Public routes
+ * Handles HomePage and Authentication
+ * @module PublicRoutes
+ */
 
 import Router from 'koa-router'
 import bodyParser from 'koa-body'

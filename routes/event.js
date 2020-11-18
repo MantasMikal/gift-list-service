@@ -1,3 +1,9 @@
+/**
+ * Event routes
+ * Handles Event specific routes
+ * @module EventRoutes
+ */
+
 import Router from 'koa-router'
 import { Events } from '../modules/events.js'
 import { Gifts } from '../modules/gifts.js'
@@ -78,6 +84,11 @@ eventRouter.post('/new', async(ctx) => {
 	}
 })
 
+/**
+ * The event details page
+ * @name EventDetails Page
+ * @route {POST} /event/:id
+ */
 eventRouter.get('/:id', async(ctx) => {
 	const { id } = ctx.params
 	const events = await new Events(dbName)
@@ -111,7 +122,7 @@ eventRouter.post('/:id/complete', async(ctx) => {
 	const events = await new Events(dbName)
 	try {
 		const { title } = await events.updateStatusById(id, 'Complete')
-		const users = await events.getEventPledgedGiftsUsers(id)
+		const users = await events.getPledgedGiftsUsers(id)
 		const uniqueUsers = removeDuplicatesByProperty(users, 'id')
 		await mailTo(uniqueUsers.map(usr => usr.email), createEventCompleteTemplate(title))
 		return ctx.redirect(

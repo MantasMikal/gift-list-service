@@ -25,6 +25,10 @@ class Gifts {
 
 	/**
    * Adds a new gift
+	 * @param {Number} eventId id of the event
+	 * @param {String} name name of the gift
+	 * @param {String} url url where to buy the gift
+	 * @param {Number} price price of the gift
    * @returns {Boolean} true if operation was successful
    */
 	async add({eventId, name, url, price}) {
@@ -54,19 +58,6 @@ class Gifts {
 		}
 		const sql = 'SELECT * FROM gifts WHERE eventId = $1'
 		return await this.db.all(sql, id)
-	}
-
-	/**
-	 * Retrieves all users that have agreed to pledge gifts
-	 * for an event
-	 * @param {Number} id event id
-	 * @returns {Array} array of users
-	 */
-	async getEventPledgedGiftsUsers(id) {
-		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
-		const sql = 'SELECT users.* FROM gifts INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'
-		const users = await this.db.all(sql, id)
-		return users
 	}
 
 	/**

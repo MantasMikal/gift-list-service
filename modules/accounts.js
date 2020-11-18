@@ -64,10 +64,9 @@ class Accounts {
 
 	/**
    * Retrieves an user by id
-   * @params {Number} id id of the user
+   * @param {Number} id id of the user
    * @returns {Object} user object
    */
-
 	async getById(id) {
 		if (!id || isNaN(id)) throw Error('invalid or missing id')
 		const sql = 'SELECT * FROM users WHERE id = $1'
