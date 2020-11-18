@@ -78,6 +78,25 @@ eventRouter.post('/new', async(ctx) => {
 	}
 })
 
+eventRouter.get('/:id', async(ctx) => {
+	const { id } = ctx.params
+	const events = await new Events(dbName)
+	const gifts = await new Gifts(dbName)
+	try {
+		const event = await events.getById(id)
+		const giftList = await gifts.getEventGifts(id)
+		ctx.hbs.data = { event: event, gifts: giftList }
+		ctx.hbs.canComplete = event.status !== 'Complete' && event.userId === ctx.session.userId
+		await ctx.render('event', ctx.hbs)
+	} catch (err) {
+		console.log(err)
+		await ctx.render('error', ctx.hbs)
+	} finally {
+		events.close()
+		gifts.close()
+	}
+})
+
 /**
  * The event status update script
  * Sets event status to complete
