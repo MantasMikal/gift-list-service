@@ -19,7 +19,7 @@
   "scripts": {
     "packagedeps": "./node_modules/.bin/depcheck .",
     "dependency": "./node_modules/.bin/dependency-check -i bcrypt --unused --no-dev . && node_modules/.bin/dependency-check --missing .",
-    "start": "node index.js",
+    "start": "nodemon --experimental-json-modules index.js",
     "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
     "linter": "node_modules/.bin/eslint .",
     "fix": "node_modules/.bin/eslint . --fix",
@@ -33,6 +33,7 @@
     "dotenv": "^8.2.0",
     "fs-extra": "^9.0.1",
     "handlebars": "^4.7.6",
+    "jsonschema": "^1.4.0",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
     "koa-router": "^9.4.0",
@@ -41,6 +42,7 @@
     "koa-views": "^6.3.0",
     "mime-types": "^2.1.27",
     "nodemailer": "^6.4.16",
+    "nodemon": "^2.0.6",
     "sqlite-async": "^1.1.0"
   },
   "devDependencies": {

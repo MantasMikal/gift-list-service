@@ -9,7 +9,6 @@
 	<link href="{{host}}/styles/normalize.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/header.css" type="text/css" rel="stylesheet" />
 	<link href="{{host}}/styles/base.css" type="text/css" rel="stylesheet" />
-	<link href="{{host}}/styles/login.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
@@ -38,11 +37,11 @@
 			<form action="/register" enctype="multipart/form-data" method="post">
 				<div class="login__field">
 					<label for="user">Username</label><br />
-					<input type="text" name="user" placeholder="Your username" value="{{data.body.user}}" required>
+					<input minlength="3" maxlength="16" type="text" name="user" placeholder="Your username" value="{{data.body.user}}" required>
 				</div>
 				<div class="login__field">
 					<label for="pass">Password</label><br />
-					<input type="password" name="pass" placeholder="Your password" value="{{data.body.pass}}" required>
+					<input minlength="3" maxlength="16" type="password" name="pass" placeholder="Your password" value="{{data.body.pass}}" required>
 				</div>
 				<div>
 					<label for="email">Email</label><br />
