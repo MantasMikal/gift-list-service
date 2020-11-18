@@ -205,11 +205,11 @@ test('EVENTS:getEventOwner - should return undefined if event does not exist', a
 })
 
 
-test('EVENTS:getEventPledgedGiftsUsers -  should return all users that pledged gift in an event', async(test) => {
+test('EVENTS:getPledgedGiftsUsers -  should return all users that pledged gift in an event', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 	await events.setUpTestDatabase()
-	const users = await events.getEventPledgedGiftsUsers(1)
+	const users = await events.getPledgedGiftsUsers(1)
 	const expectedUsers = [
 		{ id: 1, user: 'jeff', pass: 'password', email: 'jeff@email.com' },
 		{
@@ -228,11 +228,11 @@ test('EVENTS:getEventPledgedGiftsUsers -  should return all users that pledged g
 	events.close()
 })
 
-test('EVENTS:getEventPledgedGiftsUsers - error if id missing', async(test) => {
+test('EVENTS:getPledgedGiftsUsers - error if id missing', async(test) => {
 	test.plan(1)
 	const events = await new Events()
 	try {
-		await events.getEventPledgedGiftsUsers('p')
+		await events.getPledgedGiftsUsers('p')
 		test.fail('error not thrown')
 	} catch (err) {
 		test.is(err.message, 'Missing or invalid fields', 'incorrect error message')
