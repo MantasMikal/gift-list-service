@@ -1,9 +1,10 @@
-/** @module Events */
-
 import sqlite from 'sqlite-async'
 import handleImageUpload from '../lib/image-upload.js'
 import { eventDatabaseSetup } from '../lib/test-setup-sql-queries.js'
 
+/**
+ * Represents events
+ */
 class Events {
 	constructor(dbName = ':memory:') {
 		return (async() => {
@@ -25,8 +26,8 @@ class Events {
 	}
 
 	/**
-   * retrieves all events
-   * @returns {Array} returns array containing all events in the database
+   * Retrieves all events
+   * @returns {Array} array containing all events in the database
    */
 	async all() {
 		const sql = 'SELECT * FROM events'
@@ -36,7 +37,7 @@ class Events {
 	/**
    * Adds new event
    * @param {Number} data.userId user ID in the database
-   * @param {String} data.tilke event title
+   * @param {String} data.title event title
    * @param {String} data.description event description
    * @param {Date} data.date date of the event
    * @param {String} data.fileType file type of the image thumbnail
@@ -64,8 +65,8 @@ class Events {
 
 	/**
    * Retrieves an event by id
-   * @param {Number} id id of the event
-   * @returns {Object} returns an event
+   * @param {Number} id of the event
+   * @returns {Object} an event object
    */
 	async getById(id) {
 		console.log('Getting event with id', id)
@@ -74,15 +75,11 @@ class Events {
 		return await this.db.get(sql, id)
 	}
 
-	async close() {
-		await this.db.close()
-	}
-
 	/**
 	 * Updates event status by id
-	 * @param {Number} id
-	 * @param {String} status
-	 * @returns {Object} updated event if the operation successful
+	 * @param {Number} id of the event
+	 * @param {String} status current status of the event
+	 * @returns {Object} updated event object if the operation successful
 	 */
 	async updateStatusById(id, status) {
 		if(!id || isNaN(id) || !status) throw Error('Missing or inavild fields')
@@ -98,9 +95,9 @@ class Events {
 	}
 
 	/**
-	 * Gets the event owner
+	 * Gets the event owner by event Id
 	 * @param {Number} id of the event
-	 * @returns {Object} user
+	 * @returns {Object} user object
 	 */
 	async getEventOwner(id) {
 		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
@@ -121,7 +118,7 @@ class Events {
 	 * @param {Number} id event id
 	 * @returns {Array} array of users
 	 */
-	async getEventPledgedGiftsUsers(id) {
+	async getPledgedGiftsUsers(id) {
 		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
 		const sql = 'SELECT users.* FROM gifts\
 			INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'
@@ -132,13 +129,20 @@ class Events {
 	 * Test setup
 	 */
 	async setUpTestDatabase() {
-		// TODO Check env
+		if(process.env.NODE_ENV !== 'development') return
 		try {
 			await this.db.exec(eventDatabaseSetup)
 		} catch (err) {
 			console.log(err)
 			throw err
 		}
+	}
+
+	/**
+	 * Closes database connection
+	 */
+	async close() {
+		await this.db.close()
 	}
 }
 

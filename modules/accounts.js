@@ -1,10 +1,11 @@
-/** @module Accounts */
-
 import bcrypt from 'bcrypt-promise'
 import sqlite from 'sqlite-async'
 
 const saltRounds = 10
 
+/**
+ * Represents user
+ */
 class Accounts {
 	constructor(dbName = ':memory:') {
 		return (async() => {
@@ -19,10 +20,10 @@ class Accounts {
 	}
 
 	/**
-   * registers a new user
+   * Registers a new user
    * @param {String} user the chosen username
    * @param {String} pass the chosen password
-   * @returns {Boolean} returns true if the new user has been added
+   * @returns {Boolean} true if the new user has been added
    */
 	async register(user, pass, email) {
 		Array.from(arguments).forEach((val) => {
@@ -44,10 +45,10 @@ class Accounts {
 	}
 
 	/**
-   * checks to see if a set of login credentials are valid
+   * Checks to see if a set of login credentials are valid
    * @param {String} username the username to check
    * @param {String} password the password to check
-   * @returns {Number} returns user id if credentials are valid
+   * @returns {Number} user id if credentials are valid
    */
 	async login(username, password) {
 		let sql = 'SELECT count(id) AS count FROM users WHERE user = $1;'
@@ -62,17 +63,19 @@ class Accounts {
 	}
 
 	/**
-   * retrieves an user by id
-   * @params {Number} id id of the user
-   * @returns {Object} of user
+   * Retrieves an user by id
+   * @param {Number} id id of the user
+   * @returns {Object} user object
    */
-
 	async getById(id) {
 		if (!id || isNaN(id)) throw Error('invalid or missing id')
 		const sql = 'SELECT * FROM users WHERE id = $1'
 		return await this.db.all(sql, id)
 	}
 
+	/**
+	 * Closes database connection
+	 */
 	async close() {
 		await this.db.close()
 	}

@@ -1,6 +1,8 @@
-/** @module Gifts */
-
 import sqlite from 'sqlite-async'
+
+/**
+ * Represents gifts
+ */
 class Gifts {
 	constructor(dbName = ':memory:') {
 		return (async() => {
@@ -23,6 +25,10 @@ class Gifts {
 
 	/**
    * Adds a new gift
+	 * @param {Number} eventId id of the event
+	 * @param {String} name name of the gift
+	 * @param {String} url url where to buy the gift
+	 * @param {Number} price price of the gift
    * @returns {Boolean} true if operation was successful
    */
 	async add({eventId, name, url, price}) {
@@ -42,11 +48,10 @@ class Gifts {
 	}
 
 	/**
-   * retrieves all gifts of an event
+   * Retrieves all gifts of an event
    * @param {Number} id id of the event
-   * @returns {Object} returns all gifts associated with event id
+   * @returns {Array} array of gifts associated with event id
    */
-
 	async getEventGifts(id) {
 		if(!id || isNaN(id)) {
 			throw Error('invalid or missing id')
@@ -56,24 +61,10 @@ class Gifts {
 	}
 
 	/**
-	 * Retrieves all users that have agreed to pledge gifts
-	 * for an event
-	 * @param {Number} id event id
-	 * @returns {Array} array of users
-	 */
-	async getEventPledgedGiftsUsers(id) {
-		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
-		const sql = 'SELECT users.* FROM gifts INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'
-		const users = await this.db.all(sql, id)
-		return users
-	}
-
-	/**
    * Gets gift by id
    * @param {Number} id id of the gift
-   * @returns {Object} returns the gift
+   * @returns {Object} returns the gift object
    */
-
 	async getById(id) {
 		if(!id || isNaN(id)) {
 			throw Error('invalid or missing id')
@@ -88,9 +79,8 @@ class Gifts {
    * @param {Number} giftId id of the gift
 	 * @param {String} user username of the user
 	 * @param {Number} eventId id of the event
-   * @returns {Object} returns gift if operation was successful
+   * @returns {Object} returns gift object if operation was successful
    */
-
 	async pledgeGift(giftId, user, eventId) {
 		if(!user) throw Error('missing or invalid field')
 		Array.from([giftId, eventId]).forEach((val) => {
@@ -108,6 +98,9 @@ class Gifts {
 		}
 	}
 
+	/**
+	 * Closes database connection
+	 */
 	async close() {
 		await this.db.close()
 	}
