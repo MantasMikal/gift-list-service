@@ -17,7 +17,7 @@ import { validateUser } from '../controllers/validation.js'
 const dbName = 'website.db'
 
 /**
- * The secure home page.
+ * The home page.
  *
  * @name Home Page
  * @route {GET} /
@@ -46,6 +46,9 @@ publicRouter.get('/register', async ctx => await ctx.render('register', ctx.hbs)
  *
  * @name Register Script
  * @route {POST} /register
+ * @bodyparam {String} user username
+ * @bodyparam {String} pass password
+ * @bodyparam {String} email email
  */
 publicRouter.post('/register', validateUser, async ctx => {
 	const account = await new Accounts(dbName)
@@ -96,6 +99,8 @@ publicRouter.get('/login', async ctx => {
  *
  * @name Login Script
  * @route {POST} /login
+ * @bodyparam {String} user username
+ * @bodyparam {String} pass password
  */
 publicRouter.post('/login', async ctx => {
 	const account = await new Accounts(dbName)

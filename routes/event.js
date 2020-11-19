@@ -11,6 +11,7 @@ import mailTo from '../service/mailer/mailer.js'
 import { createEventCompleteTemplate, createGiftPledgeTemplate } from '../service/mailer/templates.js'
 import removeDuplicatesByProperty from '../lib/remove-duplicates-by-property.js'
 import { validateEvent } from '../controllers/validation.js'
+import auth from '../controllers/auth.js'
 
 const eventRouter = new Router({ prefix: '/event' })
 const dbName = 'website.db'
@@ -18,15 +19,13 @@ const dbName = 'website.db'
 
 /**
  * The event creation page
- *
  * @name NewEvent Page
  * @route {GET} /event/new
  */
-eventRouter.get('/new', async(ctx) => {
+eventRouter.get('/new', auth, async(ctx) => {
 	try {
 		console.log(ctx.hbs)
-		if (ctx.hbs.authorised !== true)
-			return ctx.redirect('/login?msg=You need to log in&referrer=/event/new')
+
 		await ctx.render('new-event', ctx.hbs)
 	} catch (err) {
 		ctx.hbs.data = { error: err.message }
@@ -36,11 +35,14 @@ eventRouter.get('/new', async(ctx) => {
 
 /**
  * The event creation script
- *
  * @name NewEvent Script
  * @route {POST} /event/new
+ * @bodyparam {String} title event title
+ * @bodyparam {String} description event description
+ * @bodyparam {Date} date date of the event
+ * @bodyparam {String} gifts an array of gift objects as JSON
  */
-eventRouter.post('/new', validateEvent, async(ctx) => {
+eventRouter.post('/new', auth, validateEvent, async(ctx) => {
 	const events = await new Events(dbName)
 	const gifts = await new Gifts(dbName)
 	const giftList = JSON.parse(ctx.request.body.gifts)
@@ -64,7 +66,7 @@ eventRouter.post('/new', validateEvent, async(ctx) => {
  * The event details page
  *
  * @name Event Page
- * @param id id of the event
+ * @queryparam id id of the event
  * @route {GET} /event/:id
  */
 eventRouter.get('/:id', async(ctx) => {
@@ -87,25 +89,27 @@ eventRouter.get('/:id', async(ctx) => {
 })
 
 /**
- * The event status update script
- * Sets event status to complete
- * Sends an email to all participants
+ * the event status update script
+ * that sets event status to complete
+ * and sends an email to all participants
  *
  * @name CompleteEvent Script
- * @param id id of the event
+ * @queryparam id id of the event
  * @route {POST} /event/:id/complete
  */
-eventRouter.post('/:id/complete', async(ctx) => {
+eventRouter.post('/:id/complete', auth, async(ctx) => {
 	const { id } = ctx.params
+	const { userId } = ctx.session
 	const events = await new Events(dbName)
 	try {
+		const eventOwner = await events.getEventOwner(id)
+		if(eventOwner.id !== userId) return ctx.redirect(`/event/${id}/?msg=You must be event owner`)
 		const { title } = await events.updateStatusById(id, 'Complete')
 		const users = await events.getPledgedGiftsUsers(id)
+		// Remove duplicates if one user pledged multiple gifts
 		const uniqueUsers = removeDuplicatesByProperty(users, 'id')
 		await mailTo(uniqueUsers.map(usr => usr.email), createEventCompleteTemplate(title))
-		return ctx.redirect(
-			`/event/${id}/?msg=Event status has been updated!`
-		)
+		return ctx.redirect(`/event/${id}/?msg=Event status has been updated!`)
 	} catch(err) {
 		console.log(err)
 		await ctx.render('error', ctx.hbs)
@@ -114,17 +118,18 @@ eventRouter.post('/:id/complete', async(ctx) => {
 	}
 })
 
+
 /**
  * Script that handles gift pledges
  * Assigns user to the gift that will be pledged
  * Sens an email to the event owner
  *
- * @name CompleteEvent Script
- * @param eventId id of the event
- * @param giftId id of the gift
+ * @name PledgeGift Script
+ * @queryparam eventId id of the event
+ * @queryparam giftId id of the gift
  * @route {POST} /event/:id/complete
  */
-eventRouter.post('/pledge/:eventId/:giftId', async(ctx) => {
+eventRouter.post('/pledge/:eventId/:giftId', auth, async(ctx) => {
 	const { eventId, giftId } = ctx.params
 	const eventUrl = `https://${ctx.host}/event/${eventId}`
 	const gifts = await new Gifts(dbName)
