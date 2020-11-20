@@ -97,20 +97,6 @@
   margin-bottom: 8px;
 }
 
-.event__status {
-  display: flex;
-  align-items: center;
-}
-
-.event__status span {
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.event__status button {
-  margin-left: 10px;
-}
-
 .event__gift-wrapper {
   background-color: var(--color-white);
   padding: 8px;
@@ -118,16 +104,22 @@
   margin-bottom: 8px;
 }
 
-.event__gift-price {
+.event__view-gift-button,
+.event__pledge-button,
+.event__complete-button,
+.event__completed-label {
+  margin-right: 8px;
+}
+
+.event__gift-price,
+.event__gift-name {
   font-size: 1.2em;
   font-weight: 700;
   margin-right: 8px;
 }
 
 .event__gift-name {
-  font-size: 1.2em;
   font-weight: 500;
-  margin-right: 8px;
   margin-bottom: 8px;
 }
 
@@ -136,12 +128,9 @@
   align-items: center;
 }
 
-.event__view-gift-button {
-  margin-right: 8px;
-}
-
-.event__pledge-button {
-  margin-right: 8px;
+.event__completed-label {
+  font-weight: bold;
+  font-style: italic;
 }
 
 /* Checkbox  */

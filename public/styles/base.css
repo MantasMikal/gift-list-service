@@ -132,6 +132,7 @@ input {
   right: 20px;
   background-color: var(--color-white);
   color: var(--color-black);
+  border: 2px solid var(--color-yellow);
   animation: fadein 0.5s, fadeout 0.5s 2.5s forwards;
   padding: 20px;
   border-radius: 10px;
