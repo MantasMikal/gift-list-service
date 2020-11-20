@@ -27,11 +27,11 @@ export const createGiftPledgeTemplate = (user, gift, eventUrl) => {
  * @param {String} eventTitle event title
  * @returns {Object} body as html and email subject
  */
-export const createEventCompleteTemplate = (eventTitle) => {
+export const createGiftCompleteTemplate = (eventOwner, giftName) => {
 	const bodyHtml = `
-  ${eventTitle} was completed! Thank you for agreeing to pledge the gifts :)
+  ${eventOwner} has received your gift of ${giftName}! Thank you :)
   `
-	const subject = `${eventTitle} was completed!`
+	const subject = `${eventOwner} has received your gift!`
 
 	return { bodyHtml, subject }
 }
