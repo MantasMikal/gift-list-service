@@ -28,15 +28,16 @@ const mockGifts = [
 test('GIFTS:add - add new gift', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
-	const addGift = await gifts.add(mockGifts[0])
-	test.is(addGift, true, 'unable to add event')
+	await gifts.add(mockGifts[0])
+	const addedGift = await gifts.getById(1)
+	const expectedGift = {id: 1, ...mockGifts[0]}
+	test.deepEqual(addedGift, expectedGift, 'unable to add gift')
 	gifts.close()
 })
 
 test('GIFTS:add - error if name missing', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
-
 	try {
 		await gifts.add({ ...mockGifts[0], name: undefined })
 		test.fail('error not thrown')
@@ -50,7 +51,6 @@ test('GIFTS:add - error if name missing', async(test) => {
 test('GIFTS:add - error if eventId missing', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
-
 	try {
 		await gifts.add({ ...mockGifts[0], eventId: undefined })
 		test.fail('error not thrown')
@@ -94,9 +94,7 @@ test('GIFTS:getEventGifts - error if event id is not a number', async(test) => {
 test('GIFTS:getEventGifts - should return empty array if no events exist', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
-
 	const eventGifts = await gifts.getEventGifts(1)
-
 	test.deepEqual(eventGifts, [])
 	gifts.close()
 })
@@ -106,18 +104,16 @@ test('GIFTS:getEventGifts : should retrieve all gifts associated with event', as
 	const gifts = await new Gifts()
 	await gifts.add(mockGifts[0])
 	await gifts.add(mockGifts[1])
-
 	const eventGifts = await gifts.getEventGifts(1)
 	const expectedGifts = [
 		{ id: 1, ...mockGifts[0] },
 		{ id: 2, ...mockGifts[1] },
 	]
-
 	test.deepEqual(eventGifts, expectedGifts)
 	gifts.close()
 })
 
-test('GIFTS:getEventGifts - should correctly update user by eventId and giftId', async(test) => {
+test('GIFTS:pledgeGift - should correctly update user by eventId and giftId', async(test) => {
 	test.plan(1)
 	const gifts = await new Gifts()
 	await gifts.add(mockGifts[0])
@@ -125,9 +121,7 @@ test('GIFTS:getEventGifts - should correctly update user by eventId and giftId',
 	await gifts.add(mockGifts[2])
 	await gifts.pledgeGift(3, 'jeff', 3)
 	const gift = await gifts.getEventGifts(3)
-
 	const expectedGift = [{ id: 3, ...mockGifts[2], user: 'jeff' }]
-
 	test.deepEqual(gift, expectedGift, 'user was not updated')
 })
 
@@ -139,9 +133,7 @@ test('GIFTS:pledgeGift -  should correctly update user by eventId and giftId', a
 	await gifts.add(mockGifts[2])
 	await gifts.pledgeGift(3, 'jeff', 3)
 	const gift = await gifts.getEventGifts(3)
-
 	const expectedGift = [{ id: 3, ...mockGifts[2], user: 'jeff' }]
-
 	test.deepEqual(gift, expectedGift, 'gift was not updated')
 })
 

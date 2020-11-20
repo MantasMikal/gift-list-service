@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 /**
+ * Functions that run on the front-end in new-event page
+ *
+ * @module browser/new-event
+ */
+
+/**
  * New field template
  * @param {Event} i index of the event
  * @returns {String} html of a new field

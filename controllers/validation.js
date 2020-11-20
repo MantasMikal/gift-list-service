@@ -1,7 +1,6 @@
 /**
  * A module to run JSON Schema based validation on request/response data.
  * @module controllers/validation
- * @see schemas/* for JSON Schema definition files
  */
 
 import {Validator, ValidationError} from 'jsonschema'

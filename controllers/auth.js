@@ -1,5 +1,11 @@
 /**
+ * A module to check user authentication
+ * @module controllers/auth
+ */
+
+/**
  * Middleware that checks if user is authnenticated
+ * and redirects to login page if not
  * @param {Object} ctx Koa request/response context object
  * @param {Function} next The Koa next callback
  */

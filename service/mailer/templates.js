@@ -1,4 +1,9 @@
 /**
+ * Mailer service to handle email templates
+ * @module service/mailer
+ */
+
+/**
  * Creates an email template to be sent
  * to the event owner when someone pledges a gift
  * @param {String} user
@@ -23,7 +28,6 @@ export const createGiftPledgeTemplate = (user, gift, eventUrl) => {
  * @returns {Object} body as html and email subject
  */
 export const createEventCompleteTemplate = (eventTitle) => {
-
 	const bodyHtml = `
   ${eventTitle} was completed! Thank you for agreeing to pledge the gifts :)
   `
