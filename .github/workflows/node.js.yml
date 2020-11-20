@@ -19,6 +19,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+      env:
+        MAILER_PASSWORD: ${{ secrets.MAILER_PASSWORD }}
     - run: npm i
     - run: npm run linter
-    - run: npm run test
+    - run: |
+        "$MAILER_PASSWORD" npm run test
