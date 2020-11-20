@@ -15,7 +15,7 @@
 
 <body>
 	{{#if msg}}
- 		<div class="msg">{{msg}}</div>
+	<div class="msg">{{msg}}</div>
 	{{/if}}
 	<header class='container--center container--gutter container--wide header'>
 		<a class='header__branding' href='/'>
@@ -44,12 +44,6 @@
 						<h2 class="title event__title">{{data.event.title}}</h2>
 						<time class="event__date">{{data.event.date}}</time>
 						<p class="event__description">{{data.event.description}}</p>
-						<div class="event__status">
-							Status:&nbsp;<span>{{data.event.status}}</span>
-							{{#if canComplete}}
-							<button class="button button--small button--green" onclick="handleEventStatus({{data.event.id}})">Mark as completed</button>
-							{{/if}}
-						</div>
 					</div>
 					<div class="event__gift-list">
 						<h3 class="title--small event__gift-list-title">Gift list</h3>
@@ -64,16 +58,20 @@
 								{{this.name}}
 							</div>
 							<div class="event__gift-actions">
-								{{#if this.url}}
-								<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
-									rel="noreferer noopener">
-									View
-								</a>
+								{{#if this.canComplete}}
+								<form action="/event/complete/{{../data.event.id}}/{{this.id}}" method="POST"
+									class="event__complete-button">
+									<button type='submit' class="button button--small event__complete-gift-button">
+										Complete
+									</button>
+								</form>
+								{{/if}}
+								{{#if this.isCompleted}}
+								<div class="event__completed-label">Completed</div>
 								{{/if}}
 								{{#if ../authorised}}
-								<form action="/event/pledge/{{../data.event.id}}/{{this.id}}" method="post" class="event__pledge-button">
-									<input hidden type="input" name='eventId' value={{../data.event.id}} />
-									<input hidden type="input" name='giftId' value={{this.id}} />
+								<form action="/event/pledge/{{../data.event.id}}/{{this.id}}" method="post"
+									class="event__pledge-button">
 									{{#if this.user}}
 									<div class="event__view-gift-pledged">
 										Pledged by <b>{{this.user}}</b>
@@ -84,6 +82,12 @@
 									</button>
 									{{/if}}
 								</form>
+								{{/if}}
+								{{#if this.url}}
+								<a class="button button--small event__view-gift-button" href={{this.url}} target='__blank'
+									rel="noreferer noopener">
+									View
+								</a>
 								{{/if}}
 								<label class="event__checkbox">
 									{{#if this.user}}

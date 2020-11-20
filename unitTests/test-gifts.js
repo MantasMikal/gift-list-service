@@ -8,6 +8,7 @@ const mockGifts = [
 		price: 123,
 		user: null,
 		url: 'https://google.com',
+		status: 'Active'
 	},
 	{
 		eventId: 1,
@@ -15,6 +16,7 @@ const mockGifts = [
 		price: 123,
 		user: null,
 		url: 'https://google.com',
+		status: 'Active'
 	},
 	{
 		eventId: 3,
@@ -22,6 +24,7 @@ const mockGifts = [
 		price: 1234,
 		user: null,
 		url: 'https://google.com',
+		status: 'Active'
 	},
 ]
 
@@ -195,4 +198,84 @@ test('GIFTS:getById -  should return gift by id', async(test) => {
 	const gift = await gifts.getById(1)
 	const expectedGift = { id: 1, ...mockGifts[0] }
 	test.deepEqual(gift, expectedGift, 'gift was not returned')
+})
+
+
+test('GIFTS:updateStatusById - should update gift status by id', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.add(mockGifts[0])
+	await gifts.updateStatusById(1, 'Complete')
+	const gift = await gifts.getById(1)
+	const expectedGift = {id: 1, ...mockGifts[0], status: 'Complete'}
+	test.deepEqual(gift, expectedGift, 'does not update gift status by id')
+	gifts.close()
+})
+
+
+test('GIFTS:updateStatusById - error if giftId missing' , async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.add(mockGifts[0])
+
+	try {
+		await gifts.updateStatusById(null, 'Complete')
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'missing or invalid field', 'incorrect error message')
+	} finally {
+		gifts.close()
+	}
+})
+
+test('GIFTS:updateStatusById - error if status missing' , async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.add(mockGifts[0])
+
+	try {
+		await gifts.updateStatusById(1, null)
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'missing or invalid field', 'incorrect error message')
+	} finally {
+		gifts.close()
+	}
+})
+
+
+test('EVENTS:getGiftDonor - returns the gift donor', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.setUpTestDatabase()
+	const donor = await gifts.getGiftDonor(1)
+	test.deepEqual(donor, {
+		id: 1,
+		user: 'jeff',
+		pass: 'password',
+		email: 'jeff@email.com'
+	})
+	gifts.close()
+})
+
+test('GIFTS:getGiftDonor - should error if id is invalid', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	try {
+		await gifts.getGiftDonor('invalid')
+		test.fail('error not thrown')
+	} catch(err) {
+		test.is(err.message, 'missing or invalid field', 'incorrect error message')
+	} finally {
+		gifts.close()
+	}
+})
+
+test('GIFTS:getGiftDonor - should return undefined if gift or user does not exist', async(test) => {
+	test.plan(1)
+	const gifts = await new Gifts()
+	await gifts.setUpTestDatabase()
+	const donor = await gifts.getGiftDonor(777)
+	test.deepEqual(donor, undefined)
+	gifts.close()
 })

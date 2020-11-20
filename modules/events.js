@@ -17,7 +17,6 @@ class Events {
 					description TEXT, \
           date INTEGER NOT NULL, \
 					thumbnail TEXT,\
-					status TEXT,\
           FOREIGN KEY(userId) REFERENCES users(id)\
         );'
 			await this.db.run(sql)
@@ -52,8 +51,8 @@ class Events {
 		const formattedDate = new Date(data.date).toLocaleDateString()
 		const fileName = await handleImageUpload(data.thumbnail)
 		try {
-			const sql = 'INSERT INTO events(userId, title, description, date, thumbnail, status)\
-			VALUES($1, $2, $3, $4, $5, "Active")'
+			const sql = 'INSERT INTO events(userId, title, description, date, thumbnail)\
+			VALUES($1, $2, $3, $4, $5)'
 			const values = [data.userId, data.title, data.description, formattedDate, fileName]
 			const { lastID } = await this.db.run(sql, values)
 			return lastID
@@ -76,25 +75,6 @@ class Events {
 	}
 
 	/**
-	 * Updates event status by id
-	 * @param {Number} id of the event
-	 * @param {String} status current status of the event
-	 * @returns {Object} updated event object if the operation successful
-	 */
-	async updateStatusById(id, status) {
-		if(!id || isNaN(id) || !status) throw Error('Missing or inavild fields')
-		const sql = 'UPDATE events SET status = $1 WHERE id = $2;'
-		const values = [status, id]
-		try {
-			await this.db.run(sql, values)
-			return await this.getById(id)
-		} catch (err) {
-			console.log(err)
-			throw err
-		}
-	}
-
-	/**
 	 * Gets the event owner by event Id
 	 * @param {Number} id of the event
 	 * @returns {Object} user object
@@ -109,19 +89,6 @@ class Events {
 			console.log(err)
 			throw err
 		}
-	}
-
-	/**
-	 * Retrieves all users that have agreed to pledge gifts
-	 * for an event
-	 * @param {Number} id event id
-	 * @returns {Array} array of users
-	 */
-	async getPledgedGiftsUsers(id) {
-		if(!id || isNaN(id)) throw Error('Missing or invalid fields')
-		const sql = 'SELECT users.* FROM gifts\
-			INNER JOIN users ON gifts.user = users.user WHERE gifts.eventId = $1'
-		return await this.db.all(sql, id)
 	}
 
 	/**
