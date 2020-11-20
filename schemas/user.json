@@ -15,7 +15,7 @@
         "user": {
           "description": "Unique username",
           "type": "string",
-          "minLength": 5
+          "minLength": 3
         },
         "pass": {
           "description": "Password for registration",
