@@ -23,5 +23,4 @@ jobs:
         MAILER_PASSWORD: ${{ secrets.MAILER_PASSWORD }}
     - run: npm i
     - run: npm run linter
-    - run: |
-        "$MAILER_PASSWORD" npm run test
+    - run: npm run test
