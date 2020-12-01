@@ -16,10 +16,7 @@ import userShema from '../schemas/user.json'
  */
 const makeKoaValidator = (schema, resource) => {
 	const v = new Validator()
-	const validationOptions = {
-		throwError: true,
-		propertyName: resource
-	}
+	const validationOptions = {throwError: true, propertyName: resource}
 
 	/**
    * Koa middleware handler function to do validation
