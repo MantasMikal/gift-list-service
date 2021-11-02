@@ -1,44 +1,18 @@
 # Gift List Service
+Project was created as part of University curriculum
 
 It is customary for events such as weddings for those tying the knot to make a list of the gifts they would like. Guests can then pick from the list to make sure they are buying something that is useful. All the gift list data and selections should be stored in a database.
 
 Heroku URL: https://mikalaum-sem1.herokuapp.com/
-Github URL: https://github.com/MantasMikal/mikalaum-sem1/ 
 
 ## Agreed code exceptions
 
 - Disable unused variables eslint rule in javascript files that run in the browser
 - Use button instead of checkbox to pledge gifts (Checkbox is used to indicate gift status)
 
-## Testing
+## Completed functionality:
 
-The system includes the data for 5 valid events and each event already has two items pledged from from user accounts
-
-1. `user1`
-2. `user2`
-3. `user3`
-
-All accounts have the password `p455w0rd`:
-
-Gmail Accounts
-
-1. `user: mikalaum.user1@gmail.com`
-   
-   `pass: mikalaumUser1`
-
-2. `user: mikalaum.user2@gmail.com`
-   
-   `pass: mikalaumUser2`
-
-3. `user: mikalaum.user3@gmail.com`
-   
-   `pass: mikalaumUser3`
-
-
----
-
-
-## Completed functionality: 
+All functionality is implemented.
 
 ## Stage 1
 
